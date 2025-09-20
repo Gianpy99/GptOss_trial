@@ -11,6 +11,7 @@ import base64
 import sqlite3
 import requests
 import threading
+import time
 from dataclasses import dataclass, asdict, field
 from datetime import datetime
 from typing import Any, Dict, List, Generator, Optional, Tuple, Union
@@ -31,6 +32,26 @@ def now_iso() -> str:
 def _encode_file_to_base64(path: str) -> str:
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode("utf-8")
+
+def _estimate_tokens(text: str) -> int:
+    """Rough token estimation: ~4 characters per token for English text."""
+    return len(text) // 4
+
+def _calculate_quality_metrics(response: str) -> Dict[str, Any]:
+    """Calculate basic quality metrics for a response."""
+    length = len(response)
+    tokens = _estimate_tokens(response)
+    sentences = len([s for s in response.split('.') if s.strip()])
+    words = len(response.split())
+    avg_word_length = sum(len(word) for word in response.split()) / max(words, 1)
+    
+    return {
+        "length": length,
+        "estimated_tokens": tokens,
+        "sentences": sentences,
+        "words": words,
+        "avg_word_length": round(avg_word_length, 2)
+    }
 
 @dataclass
 class ModelParameters:
@@ -305,6 +326,7 @@ class OllamaWrapper:
         files: Optional[List[str]] = None,
         timeout: int = 60,
     ) -> Dict[str, Any]:
+        start_time = time.time()
         url = f"{self.base_url}/chat"
         msgs = self._build_messages(message, include_history=include_history)
 
@@ -388,7 +410,17 @@ class OllamaWrapper:
                         if store_conversation:
                             self.memory.store_message(self.session_id, Message("user", message))
                             self.memory.store_message(self.session_id, Message("assistant", assistant_text))
-                        return {"status": "success", "assistant": assistant_text, "raw": {"cli_output": assistant_text}}
+                        response_time = time.time() - start_time
+                        quality_metrics = _calculate_quality_metrics(assistant_text)
+                        return {
+                            "status": "success", 
+                            "assistant": assistant_text, 
+                            "raw": {"cli_output": assistant_text},
+                            "metrics": {
+                                "response_time": round(response_time, 3),
+                                "quality": quality_metrics
+                            }
+                        }
                 return {"status": "error", "error": "cli_failed", "cli_error": last_err}
             except Exception as ex:
                 return {"status": "error", "error": f"cli_exception: {ex}"}
@@ -413,7 +445,18 @@ class OllamaWrapper:
                 self.memory.store_message(self.session_id, Message("user", message))
                 self.memory.store_message(self.session_id, Message("assistant", assistant_text))
 
-            return {"status": "success", "assistant": assistant_text, "raw": result}
+            response_time = time.time() - start_time
+            quality_metrics = _calculate_quality_metrics(assistant_text)
+
+            return {
+                "status": "success", 
+                "assistant": assistant_text, 
+                "raw": result,
+                "metrics": {
+                    "response_time": round(response_time, 3),
+                    "quality": quality_metrics
+                }
+            }
         except requests.RequestException as e:
             # HTTP API failed — attempt a robust CLI fallback using the `ollama` binary
             # BUT: Don't use CLI for multimodal requests (images not supported in CLI)
@@ -490,7 +533,17 @@ class OllamaWrapper:
                     if store_conversation:
                         self.memory.store_message(self.session_id, Message("user", message))
                         self.memory.store_message(self.session_id, Message("assistant", assistant_text))
-                    return {"status": "success", "assistant": assistant_text, "raw": {"cli_output": assistant_text}}
+                    response_time = time.time() - start_time
+                    quality_metrics = _calculate_quality_metrics(assistant_text)
+                    return {
+                        "status": "success", 
+                        "assistant": assistant_text, 
+                        "raw": {"cli_output": assistant_text},
+                        "metrics": {
+                            "response_time": round(response_time, 3),
+                            "quality": quality_metrics
+                        }
+                    }
                 else:
                     return {"status": "error", "error": str(e), "cli_error": last_err}
             except Exception as ex:
@@ -504,6 +557,7 @@ class OllamaWrapper:
         include_history: bool = True,
         timeout: int = DEFAULT_STREAM_TIMEOUT,
     ) -> Generator[str, None, Dict[str, Any]]:
+        start_time = time.time()
         url = f"{self.base_url}/chat"
         msgs = self._build_messages(message, include_history=include_history)
 
@@ -548,7 +602,16 @@ class OllamaWrapper:
 
                 self.memory.store_message(self.session_id, Message("user", message))
                 self.memory.store_message(self.session_id, Message("assistant", collected))
-                return {"status": "success", "assistant": collected}
+                response_time = time.time() - start_time
+                quality_metrics = _calculate_quality_metrics(collected)
+                return {
+                    "status": "success", 
+                    "assistant": collected,
+                    "metrics": {
+                        "response_time": round(response_time, 3),
+                        "quality": quality_metrics
+                    }
+                }
         except requests.RequestException as e:
             yield f"[stream_error] {e}"
             return {"status": "error", "error": str(e)}

@@ -1,3 +1,12 @@
+Metadata-Version: 2.4
+Name: ollama-wrapper
+Version: 0.0.0
+Summary: Lightweight Python wrapper for a local Ollama HTTP API
+Author: Gianpy99
+License: MIT
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+
 # Ollama_wrapper
 
 Wrapper Python leggero e completo per API HTTP Ollama locale (testato con modelli Gemma3).

@@ -1,0 +1,8 @@
+README.md
+pyproject.toml
+src/ollama_wrapper/__init__.py
+src/ollama_wrapper/wrapper.py
+src/ollama_wrapper.egg-info/PKG-INFO
+src/ollama_wrapper.egg-info/SOURCES.txt
+src/ollama_wrapper.egg-info/dependency_links.txt
+src/ollama_wrapper.egg-info/top_level.txt

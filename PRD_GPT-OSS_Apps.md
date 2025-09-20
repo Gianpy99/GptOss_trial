@@ -22,7 +22,7 @@ Enable both RocketNotes AI and MapTaster to leverage **GPT-OSS** for enhanced us
 
 - Current apps operate **entirely on mobile devices**, with standard storage, UI, and basic logic.  
 - GPT-OSS is **too large to run directly on mobile devices**, so a **backend inference server** is required.  
-- User wants **local experimentation first** with GTX1660Ti + CPU + 128GB RAM, then cloud deployment for production.  
+- User wants **local experimentation first** with GTX1660Ti + CPU + 64GB RAM, then cloud deployment for production.  
 
 ---
 
@@ -72,7 +72,7 @@ Mobile App ⇄ Backend GPT-OSS Server ⇄ Model Inference
 - OS: Windows 10 / Linux  
 - GPU: GTX1660Ti  
 - CPU: Core i7  
-- RAM: 128GB  
+- RAM: 64GB  
 - Storage: Enough for model weights (~several GB)  
 
 ### 5.2 Backend Server

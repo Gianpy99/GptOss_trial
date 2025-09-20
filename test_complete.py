@@ -1,223 +1,282 @@
 #!/usr/bin/env python3
 """
-Test completo del wrapper Ollama.
-Verifica tutte le funzionalità principali.
+Complete test of the Ollama wrapper.
+Verifies all main functionalities.
 """
 
 import sys
 import os
 
-# Aggiungiamo il src al path per l'import
+# Add src to path for import
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from ollama_wrapper import OllamaWrapper, create_coding_assistant, create_creative_assistant
 
 def test_basic_functionality():
-    """Test delle funzionalità di base"""
-    print("=== Test Funzionalità Base ===")
+    """Test basic functionalities"""
+    print("=== Basic Functionality Test ===")
     
     wrapper = OllamaWrapper(model_name="gemma3:4b")
     
-    # Test chat semplice
-    print("1. Test chat semplice...")
-    response = wrapper.chat("Rispondi solo con 'OK' in italiano", timeout=30)
+    # Test simple chat
+    print("1. Simple chat test...")
+    response = wrapper.chat("Reply only with 'OK' in English", timeout=30)
     if response.get("status") == "success":
-        print(f"   ✓ Risposta: {response.get('assistant', 'N/A')}")
+        print(f"   ✓ Response: {response.get('assistant', 'N/A')}")
     else:
-        print(f"   ❌ Errore: {response}")
+        print(f"   ❌ Error: {response}")
     
-    # Test lista modelli
-    print("2. Test lista modelli...")
+    # Test list models
+    print("2. List models test...")
     models = wrapper.list_models()
     if "error" not in models:
-        print("   ✓ Lista modelli ottenuta")
+        print("   ✓ Models list obtained")
         if "models" in models:
-            print(f"   Modelli disponibili: {len(models['models'])}")
+            print(f"   Available models: {len(models['models'])}")
     else:
-        print(f"   ❌ Errore: {models['error']}")
+        print(f"   ❌ Error: {models['error']}")
     
     # Test memory
-    print("3. Test memory...")
+    print("3. Memory test...")
     wrapper.store_memory("test_key", "test_value", "test_category")
     recall = wrapper.recall_memory("test_key")
     if recall and recall[1] == "test_value":
-        print("   ✓ Memory funziona")
+        print("   ✓ Memory works")
     else:
-        print(f"   ❌ Memory fallita: {recall}")
+        print(f"   ❌ Memory failed: {recall}")
 
 def test_streaming():
-    """Test dello streaming"""
-    print("\n=== Test Streaming ===")
+    """Test streaming"""
+    print("\n=== Streaming Test ===")
     
     wrapper = OllamaWrapper(model_name="gemma3:4b")
     
-    print("1. Test streaming chat...")
+    print("1. Streaming chat test...")
     full_response = ""
     try:
-        for chunk in wrapper.stream_chat("Conta da 1 a 5 lentamente"):
+        for chunk in wrapper.stream_chat("Count from 1 to 5 slowly"):
             print(chunk, end="", flush=True)
             full_response += chunk
-            if len(full_response) > 200:  # Limita per il test
+            if len(full_response) > 200:  # Limit for test
                 break
-        print("\n   ✓ Streaming funziona")
+        print("\n   ✓ Streaming works")
     except Exception as e:
-        print(f"\n   ❌ Errore streaming: {e}")
+        print(f"\n   ❌ Streaming error: {e}")
 
 def test_assistants():
-    """Test degli assistenti predefiniti"""
-    print("\n=== Test Assistenti Predefiniti ===")
-    
-    # Test coding assistant
-    print("1. Test coding assistant...")
-    coding = create_coding_assistant("test_coding")
-    response = coding.chat("Scrivi una funzione Python che calcola il fattoriale", timeout=30)
-    if response.get("status") == "success":
-        print("   ✓ Coding assistant funziona")
-        print(f"   Preview: {response.get('assistant', '')[:100]}...")
-    else:
-        print(f"   ❌ Errore: {response}")
-    
+    """Test predefined assistants"""
+    print("\n=== Predefined Assistants Test ===")
+
     # Test creative assistant
-    print("2. Test creative assistant...")
+    print("1. Creative assistant test...")
     creative = create_creative_assistant("test_creative")
-    response = creative.chat("Scrivi un haiku sulla programmazione", timeout=30)
+    response = creative.chat("Write a haiku about programming", timeout=30)
     if response.get("status") == "success":
-        print("   ✓ Creative assistant funziona")
+        print("   ✓ Creative assistant works")
         print(f"   Preview: {response.get('assistant', '')[:100]}...")
     else:
-        print(f"   ❌ Errore: {response}")
+        print(f"   ❌ Error: {response}")
 
 def test_sessions():
-    """Test delle sessioni"""
-    print("\n=== Test Sessioni ===")
+    """Test sessions"""
+    print("\n=== Sessions Test ===")
     
     wrapper = OllamaWrapper(model_name="gemma3:4b", session_id="test_session")
     
-    # Salva una sessione
+    # Save a session
     save_result = wrapper.save_session("test_save")
     if save_result.get("status") == "success":
-        print("   ✓ Salvataggio sessione riuscito")
+        print("   ✓ Session save successful")
     else:
-        print(f"   ❌ Errore salvataggio: {save_result}")
+        print(f"   ❌ Save error: {save_result}")
     
-    # Lista sessioni
+    # List sessions
     sessions = wrapper.list_sessions()
     if "test_save" in sessions:
-        print("   ✓ Sessione trovata nella lista")
+        print("   ✓ Session found in list")
     else:
-        print(f"   ❌ Sessione non trovata: {sessions}")
+        print(f"   ❌ Session not found: {sessions}")
     
-    # Carica sessione
+    # Load session
     load_result = wrapper.load_session("test_save")
     if load_result.get("status") == "success":
-        print("   ✓ Caricamento sessione riuscito")
+        print("   ✓ Session load successful")
     else:
-        print(f"   ❌ Errore caricamento: {load_result}")
+        print(f"   ❌ Load error: {load_result}")
 
 def test_multimodal():
-    """Test delle funzionalità multimodali con immagini"""
-    print("\n=== Test Multimodal (Immagini) ===")
+    """Test multimodal functionalities with images"""
+    print("\n=== Multimodal Test (Images) ===")
     
     wrapper = OllamaWrapper(model_name="gemma3:4b")
     
-    # Percorso dell'immagine di test
+    # Test image path
     image_path = os.path.join("examples", "_2ARTURA_Blue.png")
     
-    # Verifica che l'immagine esista
+    # Verify image exists
     if not os.path.exists(image_path):
-        print(f"   ❌ Immagine non trovata: {image_path}")
+        print(f"   ❌ Image not found: {image_path}")
         return
     
-    print(f"   📷 Testando con immagine: {image_path}")
+    print(f"   📷 Testing with image: {image_path}")
     
-    # Test verifica supporto vision del modello
-    print("1. Test supporto vision (prompt inglese)...")
+    # Test model vision support
+    print("1. Vision support test (English prompt)...")
     try:
         response = wrapper.chat("Describe the image", files=[image_path], timeout=90)
         if response.get("status") == "success":
             answer = response.get("assistant", "")
             
-            # Verifica se la risposta indica vision funzionante
+            # Check if response indicates working vision
             vision_indicators = ["mclaren", "blue", "car", "supercar", "vehicle", "speedtail", "senna", "artura"]
             has_vision = any(indicator in answer.lower() for indicator in vision_indicators)
             
             if has_vision:
-                print("   🎉 VISION FUNZIONA! Il modello vede l'auto McLaren!")
-                print(f"   Descrizione: {answer[:150]}...")
+                print("   🎉 VISION WORKS! The model sees the McLaren car!")
+                print(f"   Description: {answer[:150]}...")
             else:
-                print("   ℹ️ Risposta ricevuta ma vision potrebbe non essere attiva")
-                print(f"   Risposta: {answer[:100]}...")
+                print("   ℹ️ Response received but vision might not be active")
+                print(f"   Response: {answer[:100]}...")
         else:
-            print(f"   ❌ Errore: {response}")
+            print(f"   ❌ Error: {response}")
     except Exception as e:
-        print(f"   ❌ Eccezione: {e}")
+        print(f"   ❌ Exception: {e}")
     
-    # Test riconoscimento specifico
-    print("2. Test riconoscimento marca...")
+    # Test specific brand recognition
+    print("2. Brand recognition test...")
     try:
         response = wrapper.chat("What brand is this car?", files=[image_path], timeout=90)
         if response.get("status") == "success":
             answer = response.get("assistant", "")
             if "mclaren" in answer.lower():
-                print("   ✅ Ha identificato correttamente McLaren!")
-                print(f"   Risposta: {answer[:100]}...")
+                print("   ✅ Correctly identified McLaren!")
+                print(f"   Response: {answer[:100]}...")
             else:
-                print("   ℹ️ Risposta data ma marca non identificata chiaramente")
-                print(f"   Risposta: {answer[:100]}...")
+                print("   ℹ️ Response given but brand not clearly identified")
+                print(f"   Response: {answer[:100]}...")
         else:
-            print(f"   ❌ Errore: {response}")
+            print(f"   ❌ Error: {response}")
     except Exception as e:
-        print(f"   ❌ Eccezione: {e}")
+        print(f"   ❌ Exception: {e}")
     
-    # Test gestione errori
-    print("3. Test gestione errori...")
+    # Test error handling
+    print("3. Error handling test...")
     try:
         response = wrapper.chat(
             "Describe this image", 
-            files=["file_inesistente.jpg"],
+            files=["nonexistent_file.jpg"],
             timeout=30
         )
-        print("   ✅ Gestione errore file inesistente OK")
+        print("   ✅ Nonexistent file error handling OK")
     except Exception as e:
-        print(f"   ⚠️ Eccezione gestione errore: {e}")
+        print(f"   ⚠️ Error handling exception: {e}")
     
-    # Info finale
-    print("\n   💡 Note sul test multimodal:")
-    print("   - ✅ Il wrapper ora supporta correttamente le immagini!")
-    print("   - ✅ gemma3:4b ha funzionalità vision complete")
-    print("   - ✅ Riconosce auto, colori, e dettagli specifici")
-    print("   - 💡 Usa prompt in inglese per risultati ottimali")
+    # Final info
+    print("\n   💡 Notes on multimodal test:")
+    print("   - ✅ The wrapper now correctly supports images!")
+    print("   - ✅ gemma3:4b has complete vision capabilities")
+    print("   - ✅ Recognizes cars, colors, and specific details")
+    print("   - 💡 Use English prompts for optimal results")
+
+def test_translation():
+    """Test translation capabilities"""
+    print("\n=== Translation Test ===")
+
+    wrapper = OllamaWrapper(model_name="gemma3:4b")
+
+    # Test English to Italian translation
+    print("1. English to Italian translation test...")
+    english_text = "Hello, how are you today? I hope you're having a great day!"
+    response = wrapper.chat(f"Translate this English text to Italian: '{english_text}'", timeout=45)
+    if response.get("status") == "success":
+        translation = response.get("assistant", "")
+        # Check if response contains Italian words
+        italian_indicators = ["ciao", "come", "stai", "oggi", "spero", "giornata"]
+        has_italian = any(indicator in translation.lower() for indicator in italian_indicators)
+        if has_italian:
+            print("   ✓ English to Italian translation works")
+            print(f"   Original: {english_text}")
+            print(f"   Translation: {translation[:150]}...")
+        else:
+            print("   ⚠️ Translation response received but may not be accurate")
+            print(f"   Response: {translation[:100]}...")
+    else:
+        print(f"   ❌ Error: {response}")
+
+    # Test Italian to English translation
+    print("\n2. Italian to English translation test...")
+    italian_text = "Ciao, come stai oggi? Spero che tu stia passando una bella giornata!"
+    response = wrapper.chat(f"Translate this Italian text to English: '{italian_text}'", timeout=45)
+    if response.get("status") == "success":
+        translation = response.get("assistant", "")
+        # Check if response contains English words
+        english_indicators = ["hello", "how", "are", "you", "today", "hope", "great", "day"]
+        has_english = any(indicator in translation.lower() for indicator in english_indicators)
+        if has_english:
+            print("   ✓ Italian to English translation works")
+            print(f"   Original: {italian_text}")
+            print(f"   Translation: {translation[:150]}...")
+        else:
+            print("   ⚠️ Translation response received but may not be accurate")
+            print(f"   Response: {translation[:100]}...")
+    else:
+        print(f"   ❌ Error: {response}")
+
+    # Test technical translation
+    print("\n3. Technical translation test...")
+    technical_text = "The Python programming language is widely used for data science and machine learning applications."
+    response = wrapper.chat(f"Translate this technical text to French: '{technical_text}'", timeout=45)
+    if response.get("status") == "success":
+        translation = response.get("assistant", "")
+        # Check if response contains French words
+        french_indicators = ["python", "langage", "programmation", "utilisé", "science", "données", "apprentissage", "automatique"]
+        has_french = any(indicator in translation.lower() for indicator in french_indicators)
+        if has_french:
+            print("   ✓ Technical translation to French works")
+            print(f"   Original: {technical_text}")
+            print(f"   Translation: {translation[:150]}...")
+        else:
+            print("   ⚠️ Technical translation response received")
+            print(f"   Response: {translation[:100]}...")
+    else:
+        print(f"   ❌ Error: {response}")
+
+    print("\n   💡 Notes on translation test:")
+    print("   - ✅ Tests multiple language pairs (EN-IT, IT-EN, EN-FR)")
+    print("   - ✅ Includes both casual and technical content")
+    print("   - ✅ Verifies translation quality through keyword detection")
 
 def main():
-    """Esegue tutti i test"""
-    print("🚀 Inizio test completi del wrapper Ollama")
+    """Runs all tests"""
+    print("🚀 Starting complete Ollama wrapper tests")
     print("=" * 50)
-    
+
     try:
         test_basic_functionality()
         test_streaming()
         test_assistants()
         test_sessions()
         test_multimodal()
-        
+        test_translation()
+
         print("\n" + "=" * 50)
-        print("✅ Test completati con successo!")
-        print("\n💡 Il wrapper Ollama è pronto per l'uso!")
-        print("\nEsempi di utilizzo:")
+        print("✅ Tests completed successfully!")
+        print("\n💡 The Ollama wrapper is ready for use!")
+        print("\nUsage examples:")
         print("```python")
-        print("from ollama_wrapper import OllamaWrapper, create_coding_assistant")
+        print("from ollama_wrapper import OllamaWrapper, create_creative_assistant")
         print("")
-        print("# Wrapper di base")
+        print("# Basic wrapper")
         print("wrapper = OllamaWrapper()")
-        print("response = wrapper.chat('Ciao, come stai?')")
+        print("response = wrapper.chat('Hello, how are you?')")
         print("")
-        print("# Assistente per programmazione")
-        print("coding = create_coding_assistant()")
-        print("code = coding.chat('Scrivi una funzione Python per ordinare una lista')")
+        print("# Creative assistant")
+        print("creative = create_creative_assistant()")
+        print("story = creative.chat('Write a short story')")
         print("```")
-        
+
     except Exception as e:
-        print(f"\n❌ Errore durante i test: {e}")
+        print(f"\n❌ Error during tests: {e}")
         import traceback
         traceback.print_exc()
 

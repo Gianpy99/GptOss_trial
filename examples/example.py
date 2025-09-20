@@ -1,76 +1,76 @@
 #!/usr/bin/env python3
 """
-Esempi di utilizzo del wrapper Ollama.
-Dimostra le funzionalità principali in modo semplice.
+Examples of Ollama wrapper usage.
+Demonstrates main features in a simple way.
 """
 
 from ollama_wrapper import OllamaWrapper, create_coding_assistant, create_creative_assistant
 
 def main():
-    print("🚀 Esempi di utilizzo Ollama Wrapper")
+    print("🚀 Ollama Wrapper Usage Examples")
     print("=" * 40)
     
-    # Esempio 1: Chat semplice
-    print("\n1. Chat semplice")
+    # Example 1: Simple chat
+    print("\n1. Simple Chat")
     print("-" * 20)
     wrapper = OllamaWrapper()
-    response = wrapper.chat("Spiega la programmazione orientata agli oggetti in 2 righe")
+    response = wrapper.chat("Explain object-oriented programming in 2 lines")
     if response.get("status") == "success":
-        print(f"Risposta: {response.get('assistant')}")
+        print(f"Response: {response.get('assistant')}")
     else:
-        print(f"Errore: {response.get('error')}")
+        print(f"Error: {response.get('error')}")
 
-    # Esempio 2: Streaming chat
+    # Example 2: Streaming chat
     print("\n2. Streaming Chat")
     print("-" * 20)
-    print("Domanda: Scrivi un haiku sui computer")
-    print("Risposta: ", end="")
+    print("Question: Write a haiku about computers")
+    print("Response: ", end="")
     try:
-        for chunk in wrapper.stream_chat("Scrivi un haiku sui computer"):
+        for chunk in wrapper.stream_chat("Write a haiku about computers"):
             print(chunk, end="", flush=True)
-        print()  # Nuova linea alla fine
+        print()  # New line at the end
     except Exception as e:
-        print(f"Errore streaming: {e}")
+        print(f"Streaming error: {e}")
 
-    # Esempio 3: Assistente per programmazione
-    print("\n3. Assistente Programmazione")
+    # Example 3: Programming assistant
+    print("\n3. Programming Assistant")
     print("-" * 30)
-    coding = create_coding_assistant("esempio_coding")
-    response = coding.chat("Come si crea una lista in Python?")
+    coding = create_coding_assistant("coding_example")
+    response = coding.chat("How do you create a list in Python?")
     if response.get("status") == "success":
-        print(f"Risposta tecnica: {response.get('assistant')[:200]}...")
+        print(f"Technical response: {response.get('assistant')[:200]}...")
     else:
-        print(f"Errore: {response.get('error')}")
+        print(f"Error: {response.get('error')}")
 
-    # Esempio 4: Memoria
-    print("\n4. Sistema di Memoria")
+    # Example 4: Memory
+    print("\n4. Memory System")
     print("-" * 22)
-    wrapper.store_memory("linguaggio", "Python", "preferenze")
+    wrapper.store_memory("language", "Python", "preferences")
     wrapper.store_memory("framework", "FastAPI", "web")
     
-    # Lista le memorie
+    # List memories
     facts = wrapper.list_memories()
-    print(f"Fatti memorizzati: {len(facts)}")
-    for fact in facts[-2:]:  # Mostra gli ultimi 2
+    print(f"Stored facts: {len(facts)}")
+    for fact in facts[-2:]:  # Show last 2
         print(f"  - {fact['key']}: {fact['value']} ({fact['category']})")
 
-    # Esempio 5: Sessioni
-    print("\n5. Gestione Sessioni")
+    # Example 5: Sessions
+    print("\n5. Session Management")
     print("-" * 22)
-    wrapper.set_system_prompt("Sei un assistente che risponde sempre con entusiasmo!")
-    save_result = wrapper.save_session("esempio_sessione")
+    wrapper.set_system_prompt("You are an assistant that always responds with enthusiasm!")
+    save_result = wrapper.save_session("example_session")
     if save_result.get("status") == "success":
-        print("✓ Sessione salvata con successo")
+        print("✓ Session saved successfully")
         
-        # Lista sessioni
+        # List sessions
         sessions = wrapper.list_sessions()
-        print(f"Sessioni disponibili: {sessions}")
+        print(f"Available sessions: {sessions}")
     else:
-        print(f"Errore nel salvare: {save_result}")
+        print(f"Error saving: {save_result}")
 
     print("\n" + "=" * 40)
-    print("✅ Esempi completati!")
-    print("💡 Ora puoi usare il wrapper nei tuoi progetti!")
+    print("✅ Examples completed!")
+    print("💡 Now you can use the wrapper in your projects!")
 
 if __name__ == "__main__":
     main()

@@ -1,68 +1,73 @@
 # Ollama_wrapper
 
-Wrapper Python leggero e completo per API HTTP Ollama locale (testato con modelli Gemma3).
+Lightweight and complete Python wrapper for loca### Streaming chat
+```python
+# Streaming chat (chunks arrive as they come)
+for chunk in wrapper.stream_chat("Write a short poem about Mars"):
+    print(chunk, end="", flush=True)
+```ma HTTP API (tested with Gemma3 models).
 
-Questo repository fornisce un'utilità in singolo file, `wrapper.py`, che offre una API di alto livello per:
+This repository provides a single-file utility, `wrapper.py`, that offers a high-level API for:
 
-- Chat bloccante e streaming contro un server Ollama locale
-- Allegati multimodali (immagini, PDF) codificati come base64
-- Salvataggio/caricamento sessioni (JSON sotto `ollama_sessions/`)
-- Memoria (SQLite) per cronologia conversazioni e fatti a lungo termine (`ollama_memory.db`)
-- Helper di gestione modelli di base e wrapper CLI sicuro per il binario `ollama`
+- Blocking and streaming chat against a local Ollama server
+- Multimodal attachments (images, PDFs) encoded as base64
+- Session save/load (JSON under `ollama_sessions/`)
+- Memory (SQLite) for conversation history and long-term facts (`ollama_memory.db`)
+- Basic model management and safe CLI wrapper for the `ollama` binary
 
-Il progetto è intenzionalmente piccolo e pensato per sperimentazione locale con un server Ollama (URL base predefinito: `http://localhost:11434/api`).
+The project is intentionally small and designed for local experimentation with an Ollama server (default base URL: `http://localhost:11434/api`).
 
-## 📋 Indice
-- [Requisiti](#requisiti)
-- [Installazione](#installazione)
-- [Utilizzo Rapido](#utilizzo-rapido)
-- [Esempi Completi](#esempi-completi)
-- [API Principale](#api-principale)
-- [Configurazione](#configurazione)
-- [Test](#test)
-- [Contribuire](#contribuire)
+## 📋 Table of Contents
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Complete Examples](#complete-examples)
+- [Main API](#main-api)
+- [Configuration](#configuration)
+- [Testing](#testing)
+- [Contributing](#contributing)
 
-## 🔧 Requisiti
+## 🔧 Requirements
 
 - Python 3.8+
-- Libreria `requests`
-- Server Ollama in esecuzione (con modello `gemma3:4b` o simile)
+- `requests` library
+- Ollama server running (with `gemma3:4b` model or similar)
 
-## 🚀 Installazione
+## 🚀 Installation
 
-### Installazione rapida
+### Quick installation
 ```powershell
-# Clona il repository
+# Clone the repository
 git clone https://github.com/Gianpy99/Ollama_wrapper.git
 cd Ollama_wrapper
 
-# Installa le dipendenze
+# Install dependencies
 pip install -r requirements.txt
 
-# Installa il package in modalità editable
+# Install package in editable mode
 pip install -e .
 ```
 
-### Verifica installazione
+### Installation verification
 ```powershell
-# Esegui il test rapido
+# Run quick test
 python test_wrapper.py
 
-# Esegui la demo completa
+# Run complete demo
 python demo.py
 ```
 
-## ⚡ Utilizzo Rapido
+## ⚡ Quick Start
 
-### Chat semplice
+### Simple chat
 ```python
 from ollama_wrapper import OllamaWrapper
 
-# Crea il wrapper (usa gemma3:4b come default)
+# Create wrapper (uses gemma3:4b as default)
 wrapper = OllamaWrapper()
 
-# Chat semplice
-response = wrapper.chat("Spiegami la ricorsione in termini semplici")
+# Simple chat
+response = wrapper.chat("Explain recursion in simple terms")
 print(response['assistant'])
 ```
 
@@ -73,31 +78,31 @@ for chunk in wrapper.stream_chat("Scrivi una breve poesia su Marte"):
     print(chunk, end="", flush=True)
 ```
 
-### Assistenti preconfigurati
+### Preconfigured assistants
 ```python
 from ollama_wrapper import create_coding_assistant, create_creative_assistant
 
-# Assistente per programmazione (temperatura bassa, prompt specifico)
+# Programming assistant (low temperature, specific prompt)
 coding = create_coding_assistant()
-code_response = coding.chat("Scrivi una funzione Python per il quicksort")
+code_response = coding.chat("Write a Python function for quicksort")
 
-# Assistente creativo (temperatura alta)
+# Creative assistant (high temperature)
 creative = create_creative_assistant()
-story = creative.chat("Inventa una storia breve sui robot")
+story = creative.chat("Invent a short story about robots")
 ```
 
-### Memoria e sessioni
+### Memory and sessions
 ```python
-# Memorizza informazioni
-wrapper.store_memory("linguaggio_preferito", "Python", "preferenze")
+# Store information
+wrapper.store_memory("preferred_language", "Python", "preferences")
 
-# Recupera informazioni
-memory = wrapper.recall_memory("linguaggio_preferito")
-print(memory)  # ('linguaggio_preferito', 'Python', 'preferenze')
+# Retrieve information
+memory = wrapper.recall_memory("preferred_language")
+print(memory)  # ('preferred_language', 'Python', 'preferences')
 
-# Salva/carica sessioni
-wrapper.save_session("mia_sessione")
-wrapper.load_session("mia_sessione")
+# Save/load sessions
+wrapper.save_session("my_session")
+wrapper.load_session("my_session")
 ```
 
 ## 📚 Esempi Completi

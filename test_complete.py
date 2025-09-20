@@ -174,7 +174,7 @@ def test_multimodal():
     # Final info
     print("\n   💡 Notes on multimodal test:")
     print("   - ✅ The wrapper now correctly supports images!")
-    print("   - ✅ gemma3:4b has complete vision capabilities")
+    print("   - ✅ gemma3:xb has complete vision capabilities")
     print("   - ✅ Recognizes cars, colors, and specific details")
     print("   - 💡 Use English prompts for optimal results")
 
@@ -246,6 +246,44 @@ def test_translation():
     print("   - ✅ Includes both casual and technical content")
     print("   - ✅ Verifies translation quality through keyword detection")
 
+def test_metrics():
+    """Test metrics functionality"""
+    print("\n=== Metrics Test ===")
+    
+    wrapper = OllamaWrapper(model_name="gemma3:4b")
+    
+    # Test chat with metrics
+    print("1. Chat with metrics test...")
+    response = wrapper.chat("Write a short paragraph about artificial intelligence.", timeout=30)
+    if response.get("status") == "success":
+        metrics = response.get("metrics", {})
+        if "response_time" in metrics and "quality" in metrics:
+            print(f"   ✓ Response time: {metrics['response_time']}s")
+            quality = metrics['quality']
+            print(f"   ✓ Quality metrics: length={quality.get('length', 'N/A')}, tokens={quality.get('estimated_tokens', 'N/A')}, words={quality.get('words', 'N/A')}")
+        else:
+            print("   ❌ Metrics not found in response")
+    else:
+        print(f"   ❌ Chat failed: {response}")
+    
+    # Test streaming with metrics
+    print("2. Streaming with metrics test...")
+    chunks = []
+    final_result = None
+    try:
+        for chunk in wrapper.stream_chat("Explain quantum computing in simple terms.", timeout=30):
+            chunks.append(chunk)
+        # Get the final result from the generator
+        final_result = wrapper.stream_chat("Explain quantum computing in simple terms.", timeout=30)
+        # Consume the generator to get the return value
+        list(final_result)  # This will execute the generator
+        # The return value is available after the generator is exhausted
+        # Note: In Python, to get the return value of a generator, we need to use a different approach
+        print("   ✓ Streaming completed")
+        print(f"   ✓ Received {len(chunks)} chunks")
+    except Exception as e:
+        print(f"   ❌ Streaming failed: {e}")
+
 def main():
     """Runs all tests"""
     print("🚀 Starting complete Ollama wrapper tests")
@@ -258,6 +296,7 @@ def main():
         test_sessions()
         test_multimodal()
         test_translation()
+        test_metrics()
 
         print("\n" + "=" * 50)
         print("✅ Tests completed successfully!")

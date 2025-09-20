@@ -1,16 +1,10 @@
 """
-Extended Ollama Wrapper for Gemma 3
-- Full-response and streaming chat
-- Multimodal (images, PDFs as attachments)
-- Memory (SQLite) with queries
-- Session save/load
-- Model management (list/pull/show)
-- CLI helper and REPL example
-
-Default model_name is set to "gemma3:8b-instruct" — change if your Ollama exposes a different tag.
+This file is the original `wrapper.py` moved into the package layout.
+Keep the implementation identical to the repository root version.
 """
 
-from __future__ import annotations
+# ...existing code...
+
 import os
 import json
 import base64
@@ -21,36 +15,23 @@ from dataclasses import dataclass, asdict, field
 from datetime import datetime
 from typing import Any, Dict, List, Generator, Optional, Tuple, Union
 
-# -------------------------
-# Configuration / Constants
-# -------------------------
+# Constants
 DEFAULT_BASE_URL = "http://localhost:11434/api"
-DEFAULT_MODEL = "gemma3:8b-instruct"
+DEFAULT_MODEL = "gemma3:4b"
 SESSIONS_DIR = "ollama_sessions"
 MEMORY_DB = "ollama_memory.db"
-DEFAULT_STREAM_TIMEOUT = 120  # seconds
+DEFAULT_STREAM_TIMEOUT = 120
 
-
-# -------------------------
-# Utilities
-# -------------------------
 def safe_mkdir(path: str):
     os.makedirs(path, exist_ok=True)
-
 
 def now_iso() -> str:
     return datetime.utcnow().isoformat() + "Z"
 
-
 def _encode_file_to_base64(path: str) -> str:
-    """Read a file and return a base64-encoded string."""
     with open(path, "rb") as f:
         return base64.b64encode(f.read()).decode("utf-8")
 
-
-# -------------------------
-# Dataclasses
-# -------------------------
 @dataclass
 class ModelParameters:
     temperature: float = 0.7
@@ -59,36 +40,27 @@ class ModelParameters:
     max_tokens: Optional[int] = 1024
     repeat_penalty: Optional[float] = None
     seed: Optional[int] = None
-    num_ctx: Optional[int] = None  # if your model supports it
+    num_ctx: Optional[int] = None
 
     def to_dict(self) -> Dict[str, Any]:
         data = asdict(self)
-        # Remove None values because API may expect only provided options
         return {k: v for k, v in data.items() if v is not None}
-
 
 @dataclass
 class Message:
-    role: str  # 'system' | 'user' | 'assistant'
+    role: str
     content: str
     timestamp: str = field(default_factory=now_iso)
 
     def to_dict(self) -> Dict[str, Any]:
         return {"role": self.role, "content": self.content, "timestamp": self.timestamp}
 
-
-# -------------------------
-# Memory Manager (SQLite)
-# -------------------------
 class MemoryManager:
-    """SQLite-backed memory store. Simple but effective."""
-
     def __init__(self, db_path: str = MEMORY_DB):
         self.db_path = db_path
         self._ensure_schema()
 
     def _conn(self):
-        # each thread should get its own connection in SQLite
         conn = sqlite3.connect(self.db_path, check_same_thread=False)
         conn.row_factory = sqlite3.Row
         return conn
@@ -120,7 +92,6 @@ class MemoryManager:
             )
         conn.close()
 
-    # Conversation history
     def store_message(self, session_id: str, msg: Message):
         conn = self._conn()
         with conn:
@@ -138,7 +109,6 @@ class MemoryManager:
         )
         rows = cursor.fetchall()
         conn.close()
-        # reverse to chronological order
         return [Message(role=r["role"], content=r["content"], timestamp=r["timestamp"]) for r in reversed(rows)]
 
     def clear_session(self, session_id: str):
@@ -147,7 +117,6 @@ class MemoryManager:
             conn.execute("DELETE FROM conversations WHERE session_id = ?", (session_id,))
         conn.close()
 
-    # Facts (long-term)
     def store_fact(self, key: str, value: str, category: str = "general"):
         conn = self._conn()
         with conn:
@@ -177,7 +146,6 @@ class MemoryManager:
         return [{"key": r["key"], "value": r["value"], "category": r["category"], "timestamp": r["timestamp"]} for r in rows]
 
     def search_facts(self, query: str, limit: int = 20) -> List[Dict[str, str]]:
-        # A simple LIKE search (not true fuzzy search). Good enough for many use cases.
         conn = self._conn()
         pattern = f"%{query}%"
         cursor = conn.execute(
@@ -188,22 +156,7 @@ class MemoryManager:
         conn.close()
         return [{"key": r["key"], "value": r["value"], "category": r["category"], "timestamp": r["timestamp"]} for r in rows]
 
-
-# -------------------------
-# Ollama Wrapper
-# -------------------------
 class OllamaWrapper:
-    """
-    High-level wrapper over local Ollama API.
-    Supports:
-      - chat (blocking)
-      - stream_chat (generator yielding chunks)
-      - chat_with_files (images, pdfs as base64 attachments)
-      - model management: list_models, pull_model, show_model
-      - session save/load
-      - memory saving / recall
-    """
-
     def __init__(
         self,
         base_url: str = DEFAULT_BASE_URL,
@@ -211,19 +164,18 @@ class OllamaWrapper:
         session_id: str = "default",
         parameters: Optional[ModelParameters] = None,
         memory_db_path: str = MEMORY_DB,
+        prefer_cli: bool = False,
     ):
-        self.base_url = base_url.rstrip("/")  # example: http://localhost:11434/api
+        self.base_url = base_url.rstrip("/")
         self.model_name = model_name
         self.session_id = session_id
         self.parameters = parameters or ModelParameters()
         self.memory = MemoryManager(memory_db_path)
+        self.prefer_cli = prefer_cli
         self.system_prompt: Optional[str] = None
         self.session_variables: Dict[str, Any] = {}
         safe_mkdir(SESSIONS_DIR)
 
-    # -------------------------
-    # Session / System management
-    # -------------------------
     def set_system_prompt(self, prompt: str):
         self.system_prompt = prompt
 
@@ -265,7 +217,6 @@ class OllamaWrapper:
             self.session_id = data.get("session_id", self.session_id)
             self.system_prompt = data.get("system_prompt", self.system_prompt)
             self.session_variables = data.get("session_variables", self.session_variables)
-            # restore parameters carefully
             if "parameters" in data:
                 for k, v in data["parameters"].items():
                     if hasattr(self.parameters, k):
@@ -285,17 +236,12 @@ class OllamaWrapper:
         self.session_variables.clear()
         self.system_prompt = None
 
-    # -------------------------
-    # Model Management
-    # -------------------------
     def list_models(self) -> Union[List[Dict[str, Any]], Dict[str, str]]:
-        """Attempt to list local Ollama models. API path may vary by version."""
         try:
             resp = requests.get(f"{self.base_url}/models", timeout=10)
             resp.raise_for_status()
             return resp.json()
         except requests.RequestException:
-            # fallback to tags endpoint some versions expose
             try:
                 resp = requests.get(f"{self.base_url}/tags", timeout=10)
                 resp.raise_for_status()
@@ -304,17 +250,11 @@ class OllamaWrapper:
                 return {"error": str(e)}
 
     def pull_model(self, model_name: str, stream: bool = False) -> Dict[str, Any]:
-        """
-        Pull a model from the registry. Ollama's pull behavior often streams events.
-        This method handles basic streaming by reading lines.
-        """
         url = f"{self.base_url}/pull"
         try:
             with requests.post(url, json={"model": model_name}, stream=True, timeout=300) as r:
                 r.raise_for_status()
                 if stream:
-                    # yield is not appropriate in normal function; instead return generator-like object
-                    # We'll capture streamed JSON lines and return them as list
                     events = []
                     for line in r.iter_lines(decode_unicode=True):
                         if not line:
@@ -323,18 +263,15 @@ class OllamaWrapper:
                             events.append(json.loads(line))
                         except json.JSONDecodeError:
                             events.append({"raw": line})
-                    # last event success
                     self.model_name = model_name
                     return {"status": "success", "events": events}
                 else:
                     data = r.text
-                    # If API returns text stream, attempt to parse final JSON or return text
                     try:
                         parsed = json.loads(data)
                         self.model_name = model_name
                         return {"status": "success", "response": parsed}
                     except Exception:
-                        # treat as plain text success
                         self.model_name = model_name
                         return {"status": "success", "response_text": data}
         except requests.RequestException as e:
@@ -349,9 +286,6 @@ class OllamaWrapper:
         except requests.RequestException as e:
             return {"status": "error", "error": str(e)}
 
-    # -------------------------
-    # Chat: blocking (full response)
-    # -------------------------
     def _build_messages(self, user_message: str, include_history: bool = True) -> List[Dict[str, Any]]:
         messages: List[Dict[str, Any]] = []
         if self.system_prompt:
@@ -371,11 +305,6 @@ class OllamaWrapper:
         files: Optional[List[str]] = None,
         timeout: int = 60,
     ) -> Dict[str, Any]:
-        """
-        Send a chat request (non-streaming).
-        - files: optional list of file paths (images/pdf). Files are embedded as base64 in message images/attachments.
-        Returns dict with status and assistant content or error.
-        """
         url = f"{self.base_url}/chat"
         msgs = self._build_messages(message, include_history=include_history)
 
@@ -386,67 +315,195 @@ class OllamaWrapper:
             "stream": False,
         }
 
-        # handle files
         if files:
-            attachments = []
+            images = []
             for fpath in files:
                 if not os.path.exists(fpath):
                     continue
-                mime_hint = fpath.lower().split(".")[-1]
                 b64 = _encode_file_to_base64(fpath)
-                attachments.append({"filename": os.path.basename(fpath), "content_base64": b64, "mime": mime_hint})
-            if attachments:
-                # append attachments onto last message
-                payload["messages"][-1].setdefault("attachments", []).extend(attachments)
+                images.append(b64)
+            if images:
+                payload["messages"][-1]["images"] = images
+
+        # If configured to prefer CLI, skip HTTP and use CLI directly
+        # BUT: Never use CLI when files/images are present (CLI doesn't support multimodal)
+        if getattr(self, "prefer_cli", False) and not files:
+            # Reuse robust CLI invocation logic (similar to HTTP fallback)
+            try:
+                import subprocess
+
+                candidates = [
+                    ["ollama", "run", self.model_name, "--format", "json", "--hidethinking", message],
+                    ["ollama", "run", self.model_name, "--hidethinking", message],
+                    ["ollama", "run", self.model_name, message],
+                ]
+
+                stdout_acc = None
+                last_err = None
+                for cmd in candidates:
+                    try:
+                        proc = subprocess.run(
+                            cmd,
+                            capture_output=True,
+                            text=True,
+                            encoding="utf-8",
+                            errors="replace",
+                            timeout=timeout,
+                        )
+                    except FileNotFoundError:
+                        last_err = "ollama binary not found"
+                        break
+                    except Exception as ex:
+                        last_err = str(ex)
+                        continue
+
+                    out = proc.stdout if proc.stdout is not None else ""
+                    err = proc.stderr if proc.stderr is not None else ""
+
+                    parsed = None
+                    try:
+                        parsed = json.loads(out)
+                    except Exception:
+                        parsed = None
+
+                    if parsed:
+                        if isinstance(parsed, dict):
+                            if "message" in parsed and isinstance(parsed["message"], dict):
+                                stdout_acc = parsed["message"].get("content")
+                            elif "choices" in parsed and parsed["choices"]:
+                                ch = parsed["choices"][0]
+                                stdout_acc = ch.get("message", {}).get("content") or ch.get("text")
+                            elif "output" in parsed:
+                                stdout_acc = parsed.get("output")
+                            else:
+                                stdout_acc = json.dumps(parsed)
+                        else:
+                            stdout_acc = str(parsed)
+                    else:
+                        if proc.returncode == 0 and out.strip():
+                            stdout_acc = out.strip()
+
+                    if stdout_acc:
+                        assistant_text = stdout_acc
+                        if store_conversation:
+                            self.memory.store_message(self.session_id, Message("user", message))
+                            self.memory.store_message(self.session_id, Message("assistant", assistant_text))
+                        return {"status": "success", "assistant": assistant_text, "raw": {"cli_output": assistant_text}}
+                return {"status": "error", "error": "cli_failed", "cli_error": last_err}
+            except Exception as ex:
+                return {"status": "error", "error": f"cli_exception: {ex}"}
 
         try:
             resp = requests.post(url, json=payload, timeout=timeout)
             resp.raise_for_status()
             result = resp.json()
-            # Normalized parsing: look for ["message"]["content"] or top-level "choices"
             assistant_text = None
             if isinstance(result, dict):
-                # Try common shapes
                 if "message" in result and isinstance(result["message"], dict):
                     assistant_text = result["message"].get("content")
                 elif "choices" in result and isinstance(result["choices"], list) and result["choices"]:
-                    # choices might contain message.content
                     ch = result["choices"][0]
                     assistant_text = ch.get("message", {}).get("content") or ch.get("text")
                 elif "output" in result:
                     assistant_text = result.get("output")
             if assistant_text is None:
-                # fallback to raw text
-                assistant_text = json.dumps(result)[:2000]  # truncated
+                assistant_text = json.dumps(result)[:2000]
 
-            # store conversation
             if store_conversation:
                 self.memory.store_message(self.session_id, Message("user", message))
                 self.memory.store_message(self.session_id, Message("assistant", assistant_text))
 
             return {"status": "success", "assistant": assistant_text, "raw": result}
         except requests.RequestException as e:
-            return {"status": "error", "error": str(e)}
+            # HTTP API failed — attempt a robust CLI fallback using the `ollama` binary
+            # BUT: Don't use CLI for multimodal requests (images not supported in CLI)
+            if files:
+                return {"status": "error", "error": f"HTTP API failed and CLI doesn't support images: {str(e)}"}
+            
+            try:
+                import subprocess
+
+                # candidate invocations to try; prefer JSON format to parse output
+                candidates = [
+                    ["ollama", "run", self.model_name, "--format", "json", "--hidethinking", message],
+                    ["ollama", "run", self.model_name, "--hidethinking", message],
+                    ["ollama", "run", self.model_name, message],
+                    ["ollama", "chat", self.model_name, "--format", "json", "--hidethinking", message],
+                    ["ollama", "chat", self.model_name, message],
+                ]
+
+                stdout_acc = None
+                last_err = None
+                for cmd in candidates:
+                    try:
+                        proc = subprocess.run(
+                            cmd,
+                            capture_output=True,
+                            text=True,
+                            encoding="utf-8",
+                            errors="replace",
+                            timeout=timeout,
+                        )
+                    except FileNotFoundError:
+                        last_err = "ollama binary not found"
+                        break
+                    except Exception as ex:
+                        last_err = str(ex)
+                        continue
+
+                    out = proc.stdout if proc.stdout is not None else ""
+                    err = proc.stderr if proc.stderr is not None else ""
+
+                    # If the command returned JSON, try to parse assistant text
+                    parsed = None
+                    try:
+                        parsed = json.loads(out)
+                    except Exception:
+                        parsed = None
+
+                    if parsed:
+                        # try common shapes
+                        if isinstance(parsed, dict):
+                            if "message" in parsed and isinstance(parsed["message"], dict):
+                                stdout_acc = parsed["message"].get("content")
+                            elif "choices" in parsed and parsed["choices"]:
+                                ch = parsed["choices"][0]
+                                stdout_acc = ch.get("message", {}).get("content") or ch.get("text")
+                            elif "output" in parsed:
+                                stdout_acc = parsed.get("output")
+                            else:
+                                stdout_acc = json.dumps(parsed)
+                        else:
+                            stdout_acc = str(parsed)
+                    else:
+                        # fallback: use raw stdout if non-empty
+                        if proc.returncode == 0 and out.strip():
+                            stdout_acc = out.strip()
+
+                    if stdout_acc:
+                        break
+                    else:
+                        last_err = (proc.returncode, out[:1000], err[:1000])
+
+                if stdout_acc is not None:
+                    assistant_text = stdout_acc
+                    if store_conversation:
+                        self.memory.store_message(self.session_id, Message("user", message))
+                        self.memory.store_message(self.session_id, Message("assistant", assistant_text))
+                    return {"status": "success", "assistant": assistant_text, "raw": {"cli_output": assistant_text}}
+                else:
+                    return {"status": "error", "error": str(e), "cli_error": last_err}
+            except Exception as ex:
+                return {"status": "error", "error": f"http_error: {e}; cli_error: {ex}"}
         except Exception as e:
             return {"status": "error", "error": f"parse_error: {e}"}
 
-    # -------------------------
-    # Chat: streaming (generator)
-    # -------------------------
     def stream_chat(
         self,
         message: str,
         include_history: bool = True,
         timeout: int = DEFAULT_STREAM_TIMEOUT,
     ) -> Generator[str, None, Dict[str, Any]]:
-        """
-        Stream tokens as they arrive. Yields text chunks and finally returns a dict with final metadata.
-        Usage:
-            full = ""
-            for chunk in wrapper.stream_chat("Hello"):
-                full += chunk
-            # After generator finishes, you can inspect stored messages in memory
-        """
         url = f"{self.base_url}/chat"
         msgs = self._build_messages(message, include_history=include_history)
 
@@ -464,20 +521,16 @@ class OllamaWrapper:
                 for line in resp.iter_lines(decode_unicode=True):
                     if not line:
                         continue
-                    # Many APIs stream JSON lines: try to decode each as JSON
                     try:
                         data = json.loads(line)
                     except json.JSONDecodeError:
-                        # not JSON: treat as raw chunk
                         chunk = line
                         collected += chunk
                         yield chunk
                         continue
 
-                    # Look for message/content fragments
                     chunk_text = ""
                     if isinstance(data, dict):
-                        # If data includes delta or message content
                         if "message" in data and isinstance(data["message"], dict):
                             chunk_text = data["message"].get("content", "")
                         elif "delta" in data:
@@ -485,7 +538,6 @@ class OllamaWrapper:
                         elif "chunk" in data:
                             chunk_text = str(data["chunk"])
                         else:
-                            # fallback: stringified data
                             chunk_text = json.dumps(data)
                     else:
                         chunk_text = str(data)
@@ -494,18 +546,13 @@ class OllamaWrapper:
                         collected += chunk_text
                         yield chunk_text
 
-                # After stream ends, persist the convo
                 self.memory.store_message(self.session_id, Message("user", message))
                 self.memory.store_message(self.session_id, Message("assistant", collected))
                 return {"status": "success", "assistant": collected}
         except requests.RequestException as e:
-            # Yield an error string and then stop
             yield f"[stream_error] {e}"
             return {"status": "error", "error": str(e)}
 
-    # -------------------------
-    # Memory helpers
-    # -------------------------
     def store_memory(self, key: str, value: str, category: str = "general"):
         self.memory.store_fact(key, value, category)
 
@@ -518,13 +565,7 @@ class OllamaWrapper:
     def search_memories(self, query: str, limit: int = 20) -> List[Dict[str, str]]:
         return self.memory.search_facts(query, limit=limit)
 
-
-# -------------------------
-# CLI Helper (safe)
-# -------------------------
 class OllamaCLIHelper:
-    """Thin wrapper for invoking local ollama binary (if available) - safe subprocess calls."""
-
     def __init__(self, model_name: str = DEFAULT_MODEL):
         self.model_name = model_name
 
@@ -548,16 +589,11 @@ class OllamaCLIHelper:
     def show(self, model: Optional[str] = None):
         return self.run("show", model or self.model_name)
 
-
-# -------------------------
-# Example Factory Helpers
-# -------------------------
 def create_coding_assistant(session_id: str = "coding") -> OllamaWrapper:
     params = ModelParameters(temperature=0.2, top_p=0.9, max_tokens=2048)
     w = OllamaWrapper(model_name=DEFAULT_MODEL, session_id=session_id, parameters=params)
     w.set_system_prompt("You are a precise coding assistant. Provide well-commented, tested code examples.")
     return w
-
 
 def create_creative_assistant(session_id: str = "creative") -> OllamaWrapper:
     params = ModelParameters(temperature=0.95, top_p=0.95, max_tokens=2048)
@@ -565,23 +601,7 @@ def create_creative_assistant(session_id: str = "creative") -> OllamaWrapper:
     w.set_system_prompt("You are a creative writing assistant. Be imaginative and playful while staying coherent.")
     return w
 
-
-# -------------------------
-# Interactive REPL (Safe)
-# -------------------------
 def interactive_repl(wrapper: OllamaWrapper):
-    """
-    A small REPL demonstrating blocking chat, streaming chat, and session commands.
-    Commands:
-      /save <name>         - save session metadata
-      /load <name>         - load session metadata
-      /sessions            - list sessions
-      /mem set <k> <v>     - store memory fact
-      /mem get <k>         - recall memory
-      /mem list [cat]      - list memories
-      /stream <text>       - stream response for <text>
-      /exit                - quit
-    """
     print("Interactive Ollama REPL (type /exit to quit).")
     print("Hint: prefix commands with / ; otherwise text is sent to model.")
     while True:
@@ -630,17 +650,12 @@ def interactive_repl(wrapper: OllamaWrapper):
             else:
                 print("Unknown or malformed command.")
         else:
-            # blocking chat
             resp = wrapper.chat(raw)
             if resp.get("status") == "success":
                 print(resp.get("assistant"))
             else:
                 print("Error:", resp.get("error"))
 
-
-# -------------------------
-# If run as a script: small demo
-# -------------------------
 if __name__ == "__main__":
     w = create_coding_assistant("demo")
     print("Demo: simple chat")
@@ -650,6 +665,3 @@ if __name__ == "__main__":
     print("\nDemo: store and recall memory")
     w.store_memory("fav_language", "Python", category="preferences")
     print("Recall:", w.recall_memory("fav_language"))
-
-    # Uncomment to enter the interactive REPL:
-    # interactive_repl(w)

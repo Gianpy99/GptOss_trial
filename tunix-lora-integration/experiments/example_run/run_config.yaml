@@ -1,0 +1,21 @@
+experiment_name: example_run
+model_name: gemma3:8b-instruct
+lora_rank: 16
+learning_rate: 0.0001
+batch_size: 32
+num_epochs: 10
+optimizer: adam
+weight_decay: 0.01
+gradient_accumulation_steps: 1
+logging_steps: 50
+save_steps: 500
+evaluation_steps: 1000
+output_dir: ./output
+seed: 42
+data:
+  train_file: ../data/train.json
+  eval_file: ../data/eval.json
+  preprocess: true
+  max_seq_length: 512
+  padding: max_length
+  truncation: true

@@ -271,7 +271,7 @@ python -c "from src.ollama_wrapper import OllamaWrapper; print('OK')"
 ### **HF token non rilevato**
 Verifica file `.env`:
 ```
-HF_TOKEN=.......    # Il tuo token HuggingFace
+HF_TOKEN=REDACTED_HF_TOKEN
 ```
 
 ---

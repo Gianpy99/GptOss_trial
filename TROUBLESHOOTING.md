@@ -211,7 +211,7 @@ Token HuggingFace non configurato o non valido per il modello gated (Gemma).
 
 1. **Crea file `.env`**:
 ```bash
-HF_TOKEN=........  # Il tuo token HuggingFace
+HF_TOKEN=REDACTED_HF_TOKEN
 ```
 
 2. **Carica nel codice**:

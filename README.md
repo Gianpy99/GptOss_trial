@@ -1,196 +1,389 @@
-# Ollama_wrapper
+# 🏎️ F1 Expert - Fine-tuned Gemma 3 Model# Ollama_wrapper
 
-Lightweight and complete Python wrapper for loca### Streaming chat
+
+
+Fine-tuned **Gemma 3 4B** model specializzato in Formula 1, con **GPU inference** tramite Ollama.Lightweight and complete Python wrapper for loca### Streaming chat
+
 ```python
-# Streaming chat (chunks arrive as they come)
+
+---# Streaming chat (chunks arrive as they come)
+
 for chunk in wrapper.stream_chat("Write a short poem about Mars"):
-    print(chunk, end="", flush=True)
+
+## 🚀 Quick Start    print(chunk, end="", flush=True)
+
 ```ma HTTP API (tested with Gemma3 models).
 
-This repository provides a single-file utility, `wrapper.py`, that offers a high-level API for:
+### Requisiti
 
-- Blocking and streaming chat against a local Ollama server
+- Python 3.11+ con CUDA supportThis repository provides a single-file utility, `wrapper.py`, that offers a high-level API for:
+
+- Ollama installato
+
+- NVIDIA GPU (consigliata: 6GB+ VRAM)- Blocking and streaming chat against a local Ollama server
+
 - Multimodal attachments (images, PDFs) encoded as base64
-- Session save/load (JSON under `ollama_sessions/`)
+
+### Installazione- Session save/load (JSON under `ollama_sessions/`)
+
 - Memory (SQLite) for conversation history and long-term facts (`ollama_memory.db`)
-- Basic model management and safe CLI wrapper for the `ollama` binary
 
-The project is intentionally small and designed for local experimentation with an Ollama server (default base URL: `http://localhost:11434/api`).
+```powershell- Basic model management and safe CLI wrapper for the `ollama` binary
 
-## 📋 Table of Contents
-- [Requirements](#requirements)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Complete Examples](#complete-examples)
-- [Main API](#main-api)
-- [Configuration](#configuration)
-- [Testing](#testing)
-- [Contributing](#contributing)
+# 1. Clona repository
 
-## 🔧 Requirements
+git clone https://github.com/Gianpy99/Ollama_wrapper.gitThe project is intentionally small and designed for local experimentation with an Ollama server (default base URL: `http://localhost:11434/api`).
 
-- Python 3.8+
-- `requests` library
-- Ollama server running (with `gemma3:4b` model or similar)
-
-## 🚀 Installation
-
-### Quick installation
-```powershell
-# Clone the repository
-git clone https://github.com/Gianpy99/Ollama_wrapper.git
 cd Ollama_wrapper
 
-# Install dependencies
-pip install -r requirements.txt
+## 📋 Table of Contents
 
-# Install package in editable mode
-pip install -e .
-```
+# 2. Crea ambiente virtuale- [Requirements](#requirements)
 
-### Installation verification
+python -m venv .venv_training- [Installation](#installation)
+
+.\.venv_training\Scripts\Activate.ps1- [Quick Start](#quick-start)
+
+- [Complete Examples](#complete-examples)
+
+# 3. Installa dipendenze- [Main API](#main-api)
+
+pip install -r requirements.txt- [Configuration](#configuration)
+
+pip install -r requirements-finetuning.txt- [Testing](#testing)
+
+```- [Contributing](#contributing)
+
+
+
+### Uso - Inference con GPU## 🔧 Requirements
+
+
+
+```powershell- Python 3.8+
+
+# 1. Importa modello in Ollama- `requests` library
+
+ollama create f1-expert -f Modelfile-safetensors- Ollama server running (with `gemma3:4b` model or similar)
+
+
+
+# 2. Avvia UI Gradio## 🚀 Installation
+
+.\.venv_training\Scripts\Activate.ps1
+
+python ui_ollama.py### Quick installation
+
 ```powershell
-# Run quick test
+
+# 3. Apri browser# Clone the repository
+
+# http://localhost:7860git clone https://github.com/Gianpy99/Ollama_wrapper.git
+
+```cd Ollama_wrapper
+
+
+
+**Alternative CLI**:# Install dependencies
+
+```powershellpip install -r requirements.txt
+
+# Test diretto con Ollama
+
+ollama run f1-expert "Tell me about Lewis Hamilton"# Install package in editable mode
+
+pip install -e .
+
+# Test Python CPU```
+
+python test_inference_cpu.py
+
+```### Installation verification
+
+```powershell
+
+---# Run quick test
+
 python test_wrapper.py
 
+## 📁 Struttura Progetto
+
 # Run complete demo
-python demo.py
 
-# Test fine-tuning integration (optional)
-python test_integration.py
-```
+```python demo.py
 
-## 🏎️ Formula 1 Fine-Tuning Demo
+Ollama_wrapper/
 
-**NEW!** Demo pratica che mostra il miglioramento del modello prima/dopo fine-tuning:
+├── ui_ollama.py                          # 🎨 UI Gradio + Ollama (GPU)# Test fine-tuning integration (optional)
 
-```powershell
-# Demo completa con dataset F1 reale
-python demo_f1_finetuning.py
+├── Modelfile-safetensors                 # ⚙️ Config Ollamapython test_integration.py
 
-# O test veloce (5 minuti)
-python test_f1_quick.py
-```
+├── test_inference_cpu.py                 # 🧪 Test CPU alternativo```
 
-**Cosa dimostra:**
-- ❌ PRIMA: Modello dà risposte generiche su F1
+├── create_specific_f1_dataset.py         # 📊 Creazione dataset
+
+├── test_training_lightweight.py          # 🏋️ Script training## 🏎️ Formula 1 Fine-Tuning Demo
+
+├── wrapper.py                            # 🔧 Core wrapper
+
+├── f1_training_data.json                 # 📝 Dataset F1 (50 examples)**NEW!** Demo pratica che mostra il miglioramento del modello prima/dopo fine-tuning:
+
+├── requirements.txt                      # 📦 Dependencies base
+
+├── requirements-finetuning.txt           # 📦 Dependencies training```powershell
+
+├── fine_tuned_models/# Demo completa con dataset F1 reale
+
+│   └── f1_expert_merged/                 # 💾 Modello safetensors (8 GB)python demo_f1_finetuning.py
+
+├── finetuning_projects/
+
+│   └── f1_expert_fixed/                  # 📂 Artifacts training# O test veloce (5 minuti)
+
+│       ├── adapter/                      # 🎯 LoRA adapter (45 MB)python test_f1_quick.py
+
+│       ├── checkpoint-*/                 # 💾 Checkpoints```
+
+│       └── runs/                         # 📊 TensorBoard logs
+
+└── ollama_sessions/                      # 💬 Sessioni salvate**Cosa dimostra:**
+
+```- ❌ PRIMA: Modello dà risposte generiche su F1
+
 - ✅ DOPO: Modello è un esperto F1 con risposte accurate
-- 📊 Usa dati reali da Hugging Face
+
+---- 📊 Usa dati reali da Hugging Face
+
 - ⚡ Training in ~10 minuti
+
+## 🎯 Features
 
 Vedi [F1_QUICKSTART.md](F1_QUICKSTART.md) per dettagli completi.
 
-## ⚡ Quick Start
+- ✅ **Fine-tuned** su 50 esempi Formula 1
 
-### Simple chat
-```python
-from ollama_wrapper import OllamaWrapper
+- ✅ **GPU Inference** (1-5 sec per risposta via Ollama)## ⚡ Quick Start
 
-# Create wrapper (uses gemma3:4b as default)
+- ✅ **CPU Fallback** (10-15 sec via transformers)
+
+- ✅ **Web UI** (Gradio)### Simple chat
+
+- ✅ **CLI Support** (Ollama + Python)```python
+
+- ✅ **LoRA Adapter** (efficiente, 45 MB)from ollama_wrapper import OllamaWrapper
+
+
+
+---# Create wrapper (uses gemma3:4b as default)
+
 wrapper = OllamaWrapper()
 
+## 🏋️ Training
+
 # Simple chat
-response = wrapper.chat("Explain recursion in simple terms")
+
+Il modello è stato fine-tuned su **Formula_1_Dataset** (50 esempi):response = wrapper.chat("Explain recursion in simple terms")
+
 print(response['assistant'])
+
+**Parametri**:```
+
+- Base Model: `google/gemma-3-4b-it`
+
+- LoRA: rank=8, alpha=16### Chat streaming
+
+- Batch size: 2, gradient accumulation: 4```python
+
+- Epochs: 3# Streaming chat (i chunk arrivano man mano)
+
+- Learning rate: 2e-4for chunk in wrapper.stream_chat("Scrivi una breve poesia su Marte"):
+
+- Training time: ~85 minuti (NVIDIA GTX 1660 SUPER)    print(chunk, end="", flush=True)
+
 ```
 
-### Chat streaming
-```python
-# Streaming chat (i chunk arrivano man mano)
-for chunk in wrapper.stream_chat("Scrivi una breve poesia su Marte"):
-    print(chunk, end="", flush=True)
-```
+**Risultati**:
 
-### Preconfigured assistants
-```python
-from ollama_wrapper import create_coding_assistant, create_creative_assistant
+- Loss iniziale: 10.99### Preconfigured assistants
+
+- Loss finale: 9.21```python
+
+- Adapter size: 45.5 MBfrom ollama_wrapper import create_coding_assistant, create_creative_assistant
+
+- Merged model: 8 GB
 
 # Programming assistant (low temperature, specific prompt)
-coding = create_coding_assistant()
+
+---coding = create_coding_assistant()
+
 code_response = coding.chat("Write a Python function for quicksort")
 
+## 📊 Performance
+
 # Creative assistant (high temperature)
-creative = create_creative_assistant()
-story = creative.chat("Invent a short story about robots")
-```
+
+| Metodo | Tempo Risposta | VRAM | Device |creative = create_creative_assistant()
+
+|--------|---------------|------|--------|story = creative.chat("Invent a short story about robots")
+
+| **Ollama GPU** | **1-5 sec** | **4-5 GB** | **✅ GPU** |```
+
+| CPU Transformers | 10-15 sec | 0 GB | ✅ CPU |
 
 ### Memory and sessions
-```python
-# Store information
-wrapper.store_memory("preferred_language", "Python", "preferences")
 
-# Retrieve information
-memory = wrapper.recall_memory("preferred_language")
-print(memory)  # ('preferred_language', 'Python', 'preferences')
+---```python
+
+# Store information
+
+## 🛠️ Troubleshootingwrapper.store_memory("preferred_language", "Python", "preferences")
+
+
+
+### Ollama non risponde# Retrieve information
+
+```powershellmemory = wrapper.recall_memory("preferred_language")
+
+# Verifica che Ollama sia in esecuzioneprint(memory)  # ('preferred_language', 'Python', 'preferences')
+
+ollama list
 
 # Save/load sessions
-wrapper.save_session("my_session")
-wrapper.load_session("my_session")
-```
 
-## 📚 Esempi Completi
+# Se vuoto, importa modellowrapper.save_session("my_session")
 
-### Allegati multimodali
-```python
-# Chat con allegati (immagini, PDF)
+ollama create f1-expert -f Modelfile-safetensorswrapper.load_session("my_session")
+
+``````
+
+
+
+### Import Error## 📚 Esempi Completi
+
+```powershell
+
+# Reinstalla dipendenze### Allegati multimodali
+
+pip install --upgrade -r requirements.txt```python
+
+```# Chat con allegati (immagini, PDF)
+
 response = wrapper.chat(
-    "Analizza questa immagine",
-    files=["./immagine.jpg", "./documento.pdf"]
-)
+
+### GPU non utilizzata    "Analizza questa immagine",
+
+Ollama gestisce GPU automaticamente. Verifica con:    files=["./immagine.jpg", "./documento.pdf"]
+
+```powershell)
+
+nvidia-smi  # Durante inferenza dovresti vedere Ollama usando VRAM```
+
 ```
 
 ### Configurazione avanzata
-```python
+
+---```python
+
 from ollama_wrapper import OllamaWrapper, ModelParameters
 
+## 📚 Guide
+
 # Parametri personalizzati
-params = ModelParameters(
-    temperature=0.1,        # Creatività bassa per risposte precise
-    top_p=0.9,
-    max_tokens=2048,
-    seed=42                 # Per riproducibilità
+
+- `SOLUTION_FINAL_OLLAMA.md` - Soluzione completa GPUparams = ModelParameters(
+
+- `FINETUNING_GUIDE.md` - Guida training completa    temperature=0.1,        # Creatività bassa per risposte precise
+
+- `FINETUNING_SUMMARY.md` - Summary training    top_p=0.9,
+
+- `QUICK_REFERENCE.md` - Comandi rapidi    max_tokens=2048,
+
+- `TROUBLESHOOTING.md` - Problemi comuni    seed=42                 # Per riproducibilità
+
 )
+
+---
 
 wrapper = OllamaWrapper(
-    model_name="gemma3:4b",
+
+## 🤝 Contributing    model_name="gemma3:4b",
+
     session_id="sessione_lavoro",
-    parameters=params
+
+Pull requests welcome! Per modifiche importanti, apri prima una issue.    parameters=params
+
 )
 
+---
+
 # Imposta un prompt di sistema
-wrapper.set_system_prompt("Sei un esperto consulente Python. Rispondi sempre con esempi di codice.")
+
+## 📄 Licensewrapper.set_system_prompt("Sei un esperto consulente Python. Rispondi sempre con esempi di codice.")
+
 ```
+
+MIT License - vedi LICENSE file
 
 ### REPL interattivo
-```python
+
+---```python
+
 from ollama_wrapper import interactive_repl
 
+## 👤 Author
+
 wrapper = OllamaWrapper()
-interactive_repl(wrapper)  # Avvia REPL interattivo
-```
 
-### Gestione modelli
+**Gianpy99**interactive_repl(wrapper)  # Avvia REPL interattivo
+
+- GitHub: [@Gianpy99](https://github.com/Gianpy99)```
+
+
+
+---### Gestione modelli
+
 ```python
-# Lista modelli disponibili
+
+## 🙏 Credits# Lista modelli disponibili
+
 models = wrapper.list_models()
-print(models)
 
-# Scarica nuovo modello
-result = wrapper.pull_model("gemma3:12b")
+- **Google Gemma 3** - Base modelprint(models)
 
-# Informazioni su un modello
+- **HuggingFace** - Transformers & PEFT
+
+- **Ollama** - GPU inference backend# Scarica nuovo modello
+
+- **Gradio** - Web UI frameworkresult = wrapper.pull_model("gemma3:12b")
+
+
+
+---# Informazioni su un modello
+
 info = wrapper.show_model_info("gemma3:4b")
-```
 
-## 🔧 API Principale
+## 📈 Stats```
 
-### Classe OllamaWrapper
+
+
+![Model](https://img.shields.io/badge/Model-Gemma_3_4B-blue)## 🔧 API Principale
+
+![Status](https://img.shields.io/badge/Status-Production-green)
+
+![GPU](https://img.shields.io/badge/GPU-Supported-brightgreen)### Classe OllamaWrapper
+
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
 #### Costruttore
-```python
+
+---```python
+
 OllamaWrapper(
-    base_url="http://localhost:11434/api",
-    model_name="gemma3:4b",
+
+**Last Updated**: 01/10/2025      base_url="http://localhost:11434/api",
+
+**Version**: 1.0.0    model_name="gemma3:4b",
+
     session_id="default",
     parameters=None,
     memory_db_path="ollama_memory.db",

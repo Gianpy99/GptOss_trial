@@ -1,1 +1,5 @@
 requests>=2.25.0
+
+# Optional dependencies for fine-tuning
+# Install with: pip install -r requirements.txt -r requirements-finetuning.txt
+# Or: pip install ollama-wrapper[finetuning]

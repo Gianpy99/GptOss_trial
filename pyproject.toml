@@ -5,11 +5,28 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ollama-wrapper"
 version = "0.0.0"
-description = "Lightweight Python wrapper for a local Ollama HTTP API"
+description = "Lightweight Python wrapper for a local Ollama HTTP API with optional fine-tuning support"
 readme = "README.md"
 requires-python = ">=3.8"
 authors = [ { name = "Gianpy99" } ]
 license = { text = "MIT" }
+dependencies = [
+    "requests>=2.25.0",
+]
+
+[project.optional-dependencies]
+finetuning = [
+    "transformers>=4.35.0",
+    "peft>=0.7.0",
+    "torch>=2.1.0",
+    "datasets>=2.15.0",
+    "accelerate>=0.25.0",
+    "bitsandbytes>=0.41.0",
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

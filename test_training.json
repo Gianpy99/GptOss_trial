@@ -1,0 +1,326 @@
+[
+  {
+    "instruction": "What team does VER drive for in Formula 1?",
+    "output": "VER drives for Red Bull Racing in Formula 1."
+  },
+  {
+    "instruction": "What is VER's average lap time?",
+    "output": "VER's average lap time is approximately 95.04 seconds."
+  },
+  {
+    "instruction": "How does VER typically perform in races?",
+    "output": "VER typically finishes around position 1.4 in races, driving for Red Bull Racing."
+  },
+  {
+    "instruction": "What team does PER drive for in Formula 1?",
+    "output": "PER drives for Red Bull Racing in Formula 1."
+  },
+  {
+    "instruction": "What is PER's average lap time?",
+    "output": "PER's average lap time is approximately 95.58 seconds."
+  },
+  {
+    "instruction": "How does PER typically perform in races?",
+    "output": "PER typically finishes around position 2.2 in races, driving for Red Bull Racing."
+  },
+  {
+    "instruction": "What team does LEC drive for in Formula 1?",
+    "output": "LEC drives for Ferrari in Formula 1."
+  },
+  {
+    "instruction": "What is LEC's average lap time?",
+    "output": "LEC's average lap time is approximately 101.23 seconds."
+  },
+  {
+    "instruction": "How does LEC typically perform in races?",
+    "output": "LEC typically finishes around position 13.6 in races, driving for Ferrari."
+  },
+  {
+    "instruction": "What team does SAI drive for in Formula 1?",
+    "output": "SAI drives for Ferrari in Formula 1."
+  },
+  {
+    "instruction": "What is SAI's average lap time?",
+    "output": "SAI's average lap time is approximately 97.28 seconds."
+  },
+  {
+    "instruction": "How does SAI typically perform in races?",
+    "output": "SAI typically finishes around position 6.2 in races, driving for Ferrari."
+  },
+  {
+    "instruction": "What team does ALO drive for in Formula 1?",
+    "output": "ALO drives for Aston Martin in Formula 1."
+  },
+  {
+    "instruction": "What is ALO's average lap time?",
+    "output": "ALO's average lap time is approximately 95.77 seconds."
+  },
+  {
+    "instruction": "How does ALO typically perform in races?",
+    "output": "ALO typically finishes around position 3.2 in races, driving for Aston Martin."
+  },
+  {
+    "instruction": "What team does RUS drive for in Formula 1?",
+    "output": "RUS drives for Mercedes in Formula 1."
+  },
+  {
+    "instruction": "What is RUS's average lap time?",
+    "output": "RUS's average lap time is approximately 96.90 seconds."
+  },
+  {
+    "instruction": "How does RUS typically perform in races?",
+    "output": "RUS typically finishes around position 8.8 in races, driving for Mercedes."
+  },
+  {
+    "instruction": "What team does HAM drive for in Formula 1?",
+    "output": "HAM drives for Mercedes in Formula 1."
+  },
+  {
+    "instruction": "What is HAM's average lap time?",
+    "output": "HAM's average lap time is approximately 96.52 seconds."
+  },
+  {
+    "instruction": "How does HAM typically perform in races?",
+    "output": "HAM typically finishes around position 4.6 in races, driving for Mercedes."
+  },
+  {
+    "instruction": "What team does STR drive for in Formula 1?",
+    "output": "STR drives for Aston Martin in Formula 1."
+  },
+  {
+    "instruction": "What is STR's average lap time?",
+    "output": "STR's average lap time is approximately 98.81 seconds."
+  },
+  {
+    "instruction": "How does STR typically perform in races?",
+    "output": "STR typically finishes around position 8.6 in races, driving for Aston Martin."
+  },
+  {
+    "instruction": "What team does OCO drive for in Formula 1?",
+    "output": "OCO drives for Alpine in Formula 1."
+  },
+  {
+    "instruction": "What is OCO's average lap time?",
+    "output": "OCO's average lap time is approximately 97.57 seconds."
+  },
+  {
+    "instruction": "How does OCO typically perform in races?",
+    "output": "OCO typically finishes around position 14.6 in races, driving for Alpine."
+  },
+  {
+    "instruction": "What team does HUL drive for in Formula 1?",
+    "output": "HUL drives for Haas F1 Team in Formula 1."
+  },
+  {
+    "instruction": "What is HUL's average lap time?",
+    "output": "HUL's average lap time is approximately 98.19 seconds."
+  },
+  {
+    "instruction": "How does HUL typically perform in races?",
+    "output": "HUL typically finishes around position 13.2 in races, driving for Haas F1 Team."
+  },
+  {
+    "instruction": "What team does NOR drive for in Formula 1?",
+    "output": "NOR drives for McLaren in Formula 1."
+  },
+  {
+    "instruction": "What is NOR's average lap time?",
+    "output": "NOR's average lap time is approximately 96.40 seconds."
+  },
+  {
+    "instruction": "How does NOR typically perform in races?",
+    "output": "NOR typically finishes around position 13.2 in races, driving for McLaren."
+  },
+  {
+    "instruction": "What team does BOT drive for in Formula 1?",
+    "output": "BOT drives for Alfa Romeo in Formula 1."
+  },
+  {
+    "instruction": "What is BOT's average lap time?",
+    "output": "BOT's average lap time is approximately 97.30 seconds."
+  },
+  {
+    "instruction": "How does BOT typically perform in races?",
+    "output": "BOT typically finishes around position 12.6 in races, driving for Alfa Romeo."
+  },
+  {
+    "instruction": "What team does ZHO drive for in Formula 1?",
+    "output": "ZHO drives for Alfa Romeo in Formula 1."
+  },
+  {
+    "instruction": "What is ZHO's average lap time?",
+    "output": "ZHO's average lap time is approximately 99.00 seconds."
+  },
+  {
+    "instruction": "How does ZHO typically perform in races?",
+    "output": "ZHO typically finishes around position 14.6 in races, driving for Alfa Romeo."
+  },
+  {
+    "instruction": "What team does TSU drive for in Formula 1?",
+    "output": "TSU drives for AlphaTauri in Formula 1."
+  },
+  {
+    "instruction": "What is TSU's average lap time?",
+    "output": "TSU's average lap time is approximately 98.77 seconds."
+  },
+  {
+    "instruction": "How does TSU typically perform in races?",
+    "output": "TSU typically finishes around position 10.6 in races, driving for AlphaTauri."
+  },
+  {
+    "instruction": "What team does ALB drive for in Formula 1?",
+    "output": "ALB drives for Williams in Formula 1."
+  },
+  {
+    "instruction": "What is ALB's average lap time?",
+    "output": "ALB's average lap time is approximately 98.60 seconds."
+  },
+  {
+    "instruction": "How does ALB typically perform in races?",
+    "output": "ALB typically finishes around position 14.0 in races, driving for Williams."
+  },
+  {
+    "instruction": "What team does SAR drive for in Formula 1?",
+    "output": "SAR drives for Williams in Formula 1."
+  },
+  {
+    "instruction": "What is SAR's average lap time?",
+    "output": "SAR's average lap time is approximately 100.05 seconds."
+  },
+  {
+    "instruction": "How does SAR typically perform in races?",
+    "output": "SAR typically finishes around position 14.4 in races, driving for Williams."
+  },
+  {
+    "instruction": "What team does MAG drive for in Formula 1?",
+    "output": "MAG drives for Haas F1 Team in Formula 1."
+  },
+  {
+    "instruction": "What is MAG's average lap time?",
+    "output": "MAG's average lap time is approximately 97.42 seconds."
+  },
+  {
+    "instruction": "How does MAG typically perform in races?",
+    "output": "MAG typically finishes around position 13.2 in races, driving for Haas F1 Team."
+  },
+  {
+    "instruction": "What team does PIA drive for in Formula 1?",
+    "output": "PIA drives for McLaren in Formula 1."
+  },
+  {
+    "instruction": "What is PIA's average lap time?",
+    "output": "PIA's average lap time is approximately 98.24 seconds."
+  },
+  {
+    "instruction": "How does PIA typically perform in races?",
+    "output": "PIA typically finishes around position 14.8 in races, driving for McLaren."
+  },
+  {
+    "instruction": "What team does DEV drive for in Formula 1?",
+    "output": "DEV drives for AlphaTauri in Formula 1."
+  },
+  {
+    "instruction": "What is DEV's average lap time?",
+    "output": "DEV's average lap time is approximately 98.33 seconds."
+  },
+  {
+    "instruction": "How does DEV typically perform in races?",
+    "output": "DEV typically finishes around position 15.4 in races, driving for AlphaTauri."
+  },
+  {
+    "instruction": "What team does GAS drive for in Formula 1?",
+    "output": "GAS drives for Alpine in Formula 1."
+  },
+  {
+    "instruction": "What is GAS's average lap time?",
+    "output": "GAS's average lap time is approximately 97.69 seconds."
+  },
+  {
+    "instruction": "How does GAS typically perform in races?",
+    "output": "GAS typically finishes around position 10.8 in races, driving for Alpine."
+  },
+  {
+    "instruction": "Which drivers race for Red Bull Racing?",
+    "output": "The drivers racing for Red Bull Racing are: PER, VER."
+  },
+  {
+    "instruction": "What is Red Bull Racing's average lap time performance?",
+    "output": "Red Bull Racing has an average lap time of approximately 95.28 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Ferrari?",
+    "output": "The drivers racing for Ferrari are: LEC, SAI."
+  },
+  {
+    "instruction": "What is Ferrari's average lap time performance?",
+    "output": "Ferrari has an average lap time of approximately 99.26 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Aston Martin?",
+    "output": "The drivers racing for Aston Martin are: ALO, STR."
+  },
+  {
+    "instruction": "What is Aston Martin's average lap time performance?",
+    "output": "Aston Martin has an average lap time of approximately 97.29 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Mercedes?",
+    "output": "The drivers racing for Mercedes are: HAM, RUS."
+  },
+  {
+    "instruction": "What is Mercedes's average lap time performance?",
+    "output": "Mercedes has an average lap time of approximately 96.71 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Alpine?",
+    "output": "The drivers racing for Alpine are: GAS, OCO."
+  },
+  {
+    "instruction": "What is Alpine's average lap time performance?",
+    "output": "Alpine has an average lap time of approximately 97.63 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Haas F1 Team?",
+    "output": "The drivers racing for Haas F1 Team are: HUL, MAG."
+  },
+  {
+    "instruction": "What is Haas F1 Team's average lap time performance?",
+    "output": "Haas F1 Team has an average lap time of approximately 97.81 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for McLaren?",
+    "output": "The drivers racing for McLaren are: NOR, PIA."
+  },
+  {
+    "instruction": "What is McLaren's average lap time performance?",
+    "output": "McLaren has an average lap time of approximately 97.32 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Alfa Romeo?",
+    "output": "The drivers racing for Alfa Romeo are: BOT, ZHO."
+  },
+  {
+    "instruction": "What is Alfa Romeo's average lap time performance?",
+    "output": "Alfa Romeo has an average lap time of approximately 98.15 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for AlphaTauri?",
+    "output": "The drivers racing for AlphaTauri are: DEV, TSU."
+  },
+  {
+    "instruction": "What is AlphaTauri's average lap time performance?",
+    "output": "AlphaTauri has an average lap time of approximately 98.55 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Williams?",
+    "output": "The drivers racing for Williams are: ALB, SAR."
+  },
+  {
+    "instruction": "What is Williams's average lap time performance?",
+    "output": "Williams has an average lap time of approximately 99.32 seconds across their drivers."
+  },
+  {
+    "instruction": "Who is the fastest driver based on lap times?",
+    "output": "Based on lap times, VER from Red Bull Racing is the fastest driver with an average of 95.04 seconds."
+  }
+]

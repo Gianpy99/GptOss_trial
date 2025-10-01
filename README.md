@@ -55,7 +55,30 @@ python test_wrapper.py
 
 # Run complete demo
 python demo.py
+
+# Test fine-tuning integration (optional)
+python test_integration.py
 ```
+
+## 🏎️ Formula 1 Fine-Tuning Demo
+
+**NEW!** Demo pratica che mostra il miglioramento del modello prima/dopo fine-tuning:
+
+```powershell
+# Demo completa con dataset F1 reale
+python demo_f1_finetuning.py
+
+# O test veloce (5 minuti)
+python test_f1_quick.py
+```
+
+**Cosa dimostra:**
+- ❌ PRIMA: Modello dà risposte generiche su F1
+- ✅ DOPO: Modello è un esperto F1 con risposte accurate
+- 📊 Usa dati reali da Hugging Face
+- ⚡ Training in ~10 minuti
+
+Vedi [F1_QUICKSTART.md](F1_QUICKSTART.md) per dettagli completi.
 
 ## ⚡ Quick Start
 
@@ -241,9 +264,80 @@ python demo.py
 python -m pytest tests/
 ```
 
-## 🤖 Fine-tuning e personalizzazione
+## 🤖 Fine-Tuning with Hugging Face & PEFT
 
-Il wrapper è progettato per essere facilmente estendibile per progetti di fine-tuning:
+**NEW!** Ollama_wrapper ora supporta il fine-tuning di modelli usando le tue conversazioni!
+
+### Installazione dipendenze fine-tuning
+```powershell
+# Installa dipendenze per fine-tuning
+pip install -r requirements-finetuning.txt
+
+# Oppure usa le dipendenze opzionali
+pip install -e .[finetuning]
+```
+
+### Quick Start Fine-Tuning
+```python
+from ollama_wrapper import OllamaWrapper, FineTuningManager
+
+# 1. Crea conversazioni di training con Ollama
+wrapper = OllamaWrapper(session_id="training")
+wrapper.chat("What are Python decorators?")
+wrapper.chat("Show me an example")
+
+# 2. Fine-tune un modello usando quelle conversazioni
+manager = FineTuningManager(
+    model_name="microsoft/phi-2",
+    use_4bit=True  # QLoRA per efficienza memoria
+)
+
+manager.load_model()
+manager.setup_lora(r=16, lora_alpha=32)
+
+# 3. Carica dati dal database memoria di Ollama
+dataset = manager.load_training_data_from_memory()
+tokenized = manager.tokenize_dataset(dataset)
+
+# 4. Addestra
+manager.train(tokenized, num_epochs=3, output_name="my_assistant")
+manager.save_adapter("my_assistant_adapter")  # Solo pochi MB!
+
+# 5. Usa il modello fine-tuned
+from ollama_wrapper import create_finetuned_assistant
+assistant = create_finetuned_assistant("./fine_tuned_models/my_assistant_adapter")
+response = assistant.generate_text("User: Explain decorators\n\nAssistant:")
+```
+
+### Caratteristiche Fine-Tuning
+- ✅ **Integrazione seamless** con la memoria di OllamaWrapper
+- ✅ **PEFT/LoRA** per training efficiente (solo pochi MB di adapter)
+- ✅ **QLoRA** con quantizzazione 4-bit per basso uso memoria
+- ✅ **Multiple data sources**: memoria SQLite, JSON, formati custom
+- ✅ **Adapters multipli**: crea assistenti specializzati per task diversi
+- ✅ **Workflow ibrido**: combina Ollama (veloce) con modelli fine-tuned (specializzati)
+
+### Esempi Completi
+```powershell
+# Quick start (5 minuti)
+python examples/quick_start_finetuning.py
+
+# Workflow completo interattivo
+python examples/example_finetuning_integration.py
+
+# Esegui step singoli
+python examples/example_finetuning_integration.py step1  # Crea dati
+python examples/example_finetuning_integration.py step2  # Fine-tune
+python examples/example_finetuning_integration.py step3  # Testa
+```
+
+### Documentazione Completa
+Vedi [FINETUNING_GUIDE.md](FINETUNING_GUIDE.md) per:
+- Guida dettagliata setup
+- Best practices e troubleshooting
+- Configurazioni LoRA avanzate
+- Workflow ibridi Ollama + fine-tuned
+- Esempi di integrazione
 
 ### Preparazione dati per fine-tuning
 ```python

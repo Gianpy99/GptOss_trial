@@ -1,0 +1,10 @@
+# Fine-tuning dependencies
+# Install these ONLY if you want to use the FineTuningManager
+# pip install -r requirements-finetuning.txt
+
+transformers>=4.35.0
+peft>=0.7.0
+torch>=2.1.0
+datasets>=2.15.0
+accelerate>=0.25.0
+bitsandbytes>=0.41.0  # For 4-bit quantization (QLoRA)

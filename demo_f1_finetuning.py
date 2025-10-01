@@ -28,11 +28,17 @@ if sys.platform == 'win32':
 # Add parent to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from src.ollama_wrapper import OllamaWrapper
+# Import OllamaWrapper directly to avoid loading finetuning module at startup
+from src.ollama_wrapper.wrapper import OllamaWrapper
+
+print("Loading fine-tuning libraries (this may take 30-60 seconds)...")
+print("Importing PyTorch, Transformers, PEFT, scikit-learn, scipy...")
 
 try:
-    from src.ollama_wrapper import FineTuningManager, create_finetuned_assistant
+    # Import finetuning directly (will be slow, but only here)
+    from src.ollama_wrapper.finetuning import FineTuningManager, create_finetuned_assistant
     FINETUNING_AVAILABLE = True
+    print("✓ Fine-tuning libraries loaded successfully!\n")
 except ImportError:
     FINETUNING_AVAILABLE = False
     print("❌ Fine-tuning not available. Install with:")

@@ -22,7 +22,7 @@ print(f"{'='*70}\n")
 # Configurazione
 BASE_MODEL_NAME = "google/gemma-3-4b-it"
 ADAPTER_PATH = "./finetuning_projects/f1_expert_fixed/adapter"
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+DEVICE = "cpu"  # Usa CPU per evitare problemi CUDA con inferenza
 
 # Load token
 from dotenv import load_dotenv
@@ -52,18 +52,38 @@ TEST_PROMPTS = [
 
 print(f"📥 Loading tokenizer...")
 tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL_NAME, token=HF_TOKEN)
-print(f"✓ Tokenizer loaded")
+
+# Fix tokenizer: imposta pad_token uguale a eos_token
+if tokenizer.pad_token is None:
+    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.pad_token_id = tokenizer.eos_token_id
+    print(f"✓ Tokenizer loaded (pad_token fixed: {tokenizer.pad_token_id})")
+else:
+    print(f"✓ Tokenizer loaded")
 print()
 
 print(f"📥 Loading base model...")
 print(f"   (Questo può richiedere 2-3 minuti...)")
+
+# Usa 4-bit quantization per GPU 6GB (8-bit non entra)
+from transformers import BitsAndBytesConfig
+bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.bfloat16
+)
+
 model = AutoModelForCausalLM.from_pretrained(
     BASE_MODEL_NAME,
-    torch_dtype=torch.float16,
+    quantization_config=bnb_config,
     device_map="auto",
-    load_in_8bit=True,  # Usa quantizzazione per ridurre memoria
     token=HF_TOKEN
 )
+
+# IMPORTANTE: configura pad_token_id nel modello
+model.config.pad_token_id = tokenizer.pad_token_id
+
 print(f"✓ Base model loaded")
 print()
 
@@ -86,18 +106,27 @@ for i, prompt in enumerate(TEST_PROMPTS, 1):
     print(f"💬 Risposta:")
     
     try:
-        # Tokenize
-        inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+        # Tokenize con padding e attention_mask espliciti
+        inputs = tokenizer(
+            prompt, 
+            return_tensors="pt",
+            padding=True,
+            truncation=True,
+            max_length=512
+        ).to(model.device)
         
-        # Generate
+        # Generate con parametri sicuri
         with torch.no_grad():
             outputs = model.generate(
-                **inputs,
+                input_ids=inputs["input_ids"],
+                attention_mask=inputs["attention_mask"],
                 max_new_tokens=150,
                 temperature=0.7,
                 top_p=0.9,
                 do_sample=True,
-                pad_token_id=tokenizer.eos_token_id
+                pad_token_id=tokenizer.pad_token_id,
+                eos_token_id=tokenizer.eos_token_id,
+                use_cache=True
             )
         
         # Decode

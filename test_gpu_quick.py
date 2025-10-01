@@ -104,14 +104,21 @@ def tokenize_function(examples):
         max_length=512,
         padding="max_length"
     )
-    # For causal LM, labels are the same as input_ids
-    result["labels"] = result["input_ids"].copy()
+    # For causal LM, labels are the same as input_ids (use list comprehension to avoid reference issues)
+    result["labels"] = [input_ids[:] for input_ids in result["input_ids"]]
     return result
 
 print(f"🔄 Tokenizing dataset...")
 tokenized_dataset = train_dataset.map(tokenize_function, batched=True)
 print(f"✓ Dataset tokenized")
 print()
+
+# Data collator for causal LM
+from transformers import DataCollatorForLanguageModeling
+data_collator = DataCollatorForLanguageModeling(
+    tokenizer=tokenizer,
+    mlm=False  # Causal LM, not masked LM
+)
 
 # Quantization config
 print(f"⚙️ Setting up 4-bit quantization...")
@@ -175,7 +182,8 @@ training_args = TrainingArguments(
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=tokenized_dataset
+    train_dataset=tokenized_dataset,
+    data_collator=data_collator  # Use the correct data collator
 )
 
 print(f"{'='*50}")

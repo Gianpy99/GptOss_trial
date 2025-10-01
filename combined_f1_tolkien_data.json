@@ -1,0 +1,514 @@
+[
+  {
+    "instruction": "What team does VER drive for in Formula 1?",
+    "output": "VER drives for Red Bull Racing in Formula 1."
+  },
+  {
+    "instruction": "What is VER's average lap time?",
+    "output": "VER's average lap time is approximately 95.04 seconds."
+  },
+  {
+    "instruction": "How does VER typically perform in races?",
+    "output": "VER typically finishes around position 1.4 in races, driving for Red Bull Racing."
+  },
+  {
+    "instruction": "What team does PER drive for in Formula 1?",
+    "output": "PER drives for Red Bull Racing in Formula 1."
+  },
+  {
+    "instruction": "What is PER's average lap time?",
+    "output": "PER's average lap time is approximately 95.58 seconds."
+  },
+  {
+    "instruction": "How does PER typically perform in races?",
+    "output": "PER typically finishes around position 2.2 in races, driving for Red Bull Racing."
+  },
+  {
+    "instruction": "What team does LEC drive for in Formula 1?",
+    "output": "LEC drives for Ferrari in Formula 1."
+  },
+  {
+    "instruction": "What is LEC's average lap time?",
+    "output": "LEC's average lap time is approximately 101.23 seconds."
+  },
+  {
+    "instruction": "How does LEC typically perform in races?",
+    "output": "LEC typically finishes around position 13.6 in races, driving for Ferrari."
+  },
+  {
+    "instruction": "What team does SAI drive for in Formula 1?",
+    "output": "SAI drives for Ferrari in Formula 1."
+  },
+  {
+    "instruction": "What is SAI's average lap time?",
+    "output": "SAI's average lap time is approximately 97.28 seconds."
+  },
+  {
+    "instruction": "How does SAI typically perform in races?",
+    "output": "SAI typically finishes around position 6.2 in races, driving for Ferrari."
+  },
+  {
+    "instruction": "What team does ALO drive for in Formula 1?",
+    "output": "ALO drives for Aston Martin in Formula 1."
+  },
+  {
+    "instruction": "What is ALO's average lap time?",
+    "output": "ALO's average lap time is approximately 95.77 seconds."
+  },
+  {
+    "instruction": "How does ALO typically perform in races?",
+    "output": "ALO typically finishes around position 3.2 in races, driving for Aston Martin."
+  },
+  {
+    "instruction": "What team does RUS drive for in Formula 1?",
+    "output": "RUS drives for Mercedes in Formula 1."
+  },
+  {
+    "instruction": "What is RUS's average lap time?",
+    "output": "RUS's average lap time is approximately 96.90 seconds."
+  },
+  {
+    "instruction": "How does RUS typically perform in races?",
+    "output": "RUS typically finishes around position 8.8 in races, driving for Mercedes."
+  },
+  {
+    "instruction": "What team does HAM drive for in Formula 1?",
+    "output": "HAM drives for Mercedes in Formula 1."
+  },
+  {
+    "instruction": "What is HAM's average lap time?",
+    "output": "HAM's average lap time is approximately 96.52 seconds."
+  },
+  {
+    "instruction": "How does HAM typically perform in races?",
+    "output": "HAM typically finishes around position 4.6 in races, driving for Mercedes."
+  },
+  {
+    "instruction": "What team does STR drive for in Formula 1?",
+    "output": "STR drives for Aston Martin in Formula 1."
+  },
+  {
+    "instruction": "What is STR's average lap time?",
+    "output": "STR's average lap time is approximately 98.81 seconds."
+  },
+  {
+    "instruction": "How does STR typically perform in races?",
+    "output": "STR typically finishes around position 8.6 in races, driving for Aston Martin."
+  },
+  {
+    "instruction": "What team does OCO drive for in Formula 1?",
+    "output": "OCO drives for Alpine in Formula 1."
+  },
+  {
+    "instruction": "What is OCO's average lap time?",
+    "output": "OCO's average lap time is approximately 97.57 seconds."
+  },
+  {
+    "instruction": "How does OCO typically perform in races?",
+    "output": "OCO typically finishes around position 14.6 in races, driving for Alpine."
+  },
+  {
+    "instruction": "What team does HUL drive for in Formula 1?",
+    "output": "HUL drives for Haas F1 Team in Formula 1."
+  },
+  {
+    "instruction": "What is HUL's average lap time?",
+    "output": "HUL's average lap time is approximately 98.19 seconds."
+  },
+  {
+    "instruction": "How does HUL typically perform in races?",
+    "output": "HUL typically finishes around position 13.2 in races, driving for Haas F1 Team."
+  },
+  {
+    "instruction": "What team does NOR drive for in Formula 1?",
+    "output": "NOR drives for McLaren in Formula 1."
+  },
+  {
+    "instruction": "What is NOR's average lap time?",
+    "output": "NOR's average lap time is approximately 96.40 seconds."
+  },
+  {
+    "instruction": "How does NOR typically perform in races?",
+    "output": "NOR typically finishes around position 13.2 in races, driving for McLaren."
+  },
+  {
+    "instruction": "What team does BOT drive for in Formula 1?",
+    "output": "BOT drives for Alfa Romeo in Formula 1."
+  },
+  {
+    "instruction": "What is BOT's average lap time?",
+    "output": "BOT's average lap time is approximately 97.30 seconds."
+  },
+  {
+    "instruction": "How does BOT typically perform in races?",
+    "output": "BOT typically finishes around position 12.6 in races, driving for Alfa Romeo."
+  },
+  {
+    "instruction": "What team does ZHO drive for in Formula 1?",
+    "output": "ZHO drives for Alfa Romeo in Formula 1."
+  },
+  {
+    "instruction": "What is ZHO's average lap time?",
+    "output": "ZHO's average lap time is approximately 99.00 seconds."
+  },
+  {
+    "instruction": "How does ZHO typically perform in races?",
+    "output": "ZHO typically finishes around position 14.6 in races, driving for Alfa Romeo."
+  },
+  {
+    "instruction": "What team does TSU drive for in Formula 1?",
+    "output": "TSU drives for AlphaTauri in Formula 1."
+  },
+  {
+    "instruction": "What is TSU's average lap time?",
+    "output": "TSU's average lap time is approximately 98.77 seconds."
+  },
+  {
+    "instruction": "How does TSU typically perform in races?",
+    "output": "TSU typically finishes around position 10.6 in races, driving for AlphaTauri."
+  },
+  {
+    "instruction": "What team does ALB drive for in Formula 1?",
+    "output": "ALB drives for Williams in Formula 1."
+  },
+  {
+    "instruction": "What is ALB's average lap time?",
+    "output": "ALB's average lap time is approximately 98.60 seconds."
+  },
+  {
+    "instruction": "How does ALB typically perform in races?",
+    "output": "ALB typically finishes around position 14.0 in races, driving for Williams."
+  },
+  {
+    "instruction": "What team does SAR drive for in Formula 1?",
+    "output": "SAR drives for Williams in Formula 1."
+  },
+  {
+    "instruction": "What is SAR's average lap time?",
+    "output": "SAR's average lap time is approximately 100.05 seconds."
+  },
+  {
+    "instruction": "How does SAR typically perform in races?",
+    "output": "SAR typically finishes around position 14.4 in races, driving for Williams."
+  },
+  {
+    "instruction": "What team does MAG drive for in Formula 1?",
+    "output": "MAG drives for Haas F1 Team in Formula 1."
+  },
+  {
+    "instruction": "What is MAG's average lap time?",
+    "output": "MAG's average lap time is approximately 97.42 seconds."
+  },
+  {
+    "instruction": "How does MAG typically perform in races?",
+    "output": "MAG typically finishes around position 13.2 in races, driving for Haas F1 Team."
+  },
+  {
+    "instruction": "What team does PIA drive for in Formula 1?",
+    "output": "PIA drives for McLaren in Formula 1."
+  },
+  {
+    "instruction": "What is PIA's average lap time?",
+    "output": "PIA's average lap time is approximately 98.24 seconds."
+  },
+  {
+    "instruction": "How does PIA typically perform in races?",
+    "output": "PIA typically finishes around position 14.8 in races, driving for McLaren."
+  },
+  {
+    "instruction": "What team does DEV drive for in Formula 1?",
+    "output": "DEV drives for AlphaTauri in Formula 1."
+  },
+  {
+    "instruction": "What is DEV's average lap time?",
+    "output": "DEV's average lap time is approximately 98.33 seconds."
+  },
+  {
+    "instruction": "How does DEV typically perform in races?",
+    "output": "DEV typically finishes around position 15.4 in races, driving for AlphaTauri."
+  },
+  {
+    "instruction": "What team does GAS drive for in Formula 1?",
+    "output": "GAS drives for Alpine in Formula 1."
+  },
+  {
+    "instruction": "What is GAS's average lap time?",
+    "output": "GAS's average lap time is approximately 97.69 seconds."
+  },
+  {
+    "instruction": "How does GAS typically perform in races?",
+    "output": "GAS typically finishes around position 10.8 in races, driving for Alpine."
+  },
+  {
+    "instruction": "Which drivers race for Red Bull Racing?",
+    "output": "The drivers racing for Red Bull Racing are: PER, VER."
+  },
+  {
+    "instruction": "What is Red Bull Racing's average lap time performance?",
+    "output": "Red Bull Racing has an average lap time of approximately 95.28 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Ferrari?",
+    "output": "The drivers racing for Ferrari are: LEC, SAI."
+  },
+  {
+    "instruction": "What is Ferrari's average lap time performance?",
+    "output": "Ferrari has an average lap time of approximately 99.26 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Aston Martin?",
+    "output": "The drivers racing for Aston Martin are: ALO, STR."
+  },
+  {
+    "instruction": "What is Aston Martin's average lap time performance?",
+    "output": "Aston Martin has an average lap time of approximately 97.29 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Mercedes?",
+    "output": "The drivers racing for Mercedes are: HAM, RUS."
+  },
+  {
+    "instruction": "What is Mercedes's average lap time performance?",
+    "output": "Mercedes has an average lap time of approximately 96.71 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Alpine?",
+    "output": "The drivers racing for Alpine are: GAS, OCO."
+  },
+  {
+    "instruction": "What is Alpine's average lap time performance?",
+    "output": "Alpine has an average lap time of approximately 97.63 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Haas F1 Team?",
+    "output": "The drivers racing for Haas F1 Team are: HUL, MAG."
+  },
+  {
+    "instruction": "What is Haas F1 Team's average lap time performance?",
+    "output": "Haas F1 Team has an average lap time of approximately 97.81 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for McLaren?",
+    "output": "The drivers racing for McLaren are: NOR, PIA."
+  },
+  {
+    "instruction": "What is McLaren's average lap time performance?",
+    "output": "McLaren has an average lap time of approximately 97.32 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Alfa Romeo?",
+    "output": "The drivers racing for Alfa Romeo are: BOT, ZHO."
+  },
+  {
+    "instruction": "What is Alfa Romeo's average lap time performance?",
+    "output": "Alfa Romeo has an average lap time of approximately 98.15 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for AlphaTauri?",
+    "output": "The drivers racing for AlphaTauri are: DEV, TSU."
+  },
+  {
+    "instruction": "What is AlphaTauri's average lap time performance?",
+    "output": "AlphaTauri has an average lap time of approximately 98.55 seconds across their drivers."
+  },
+  {
+    "instruction": "Which drivers race for Williams?",
+    "output": "The drivers racing for Williams are: ALB, SAR."
+  },
+  {
+    "instruction": "What is Williams's average lap time performance?",
+    "output": "Williams has an average lap time of approximately 99.32 seconds across their drivers."
+  },
+  {
+    "instruction": "Who is the fastest driver based on lap times?",
+    "output": "Based on lap times, VER from Red Bull Racing is the fastest driver with an average of 95.04 seconds."
+  },
+  {
+    "instruction": "Who is Gandalf?",
+    "response": "Gandalf is one of the Istari, wizards sent to Middle-earth to aid in the fight against Sauron. He is also known as Gandalf the Grey and later Gandalf the White after his return from death. He plays a crucial role in 'The Hobbit' and 'The Lord of the Rings', guiding the Fellowship and helping to defeat Sauron."
+  },
+  {
+    "instruction": "What is the One Ring?",
+    "response": "The One Ring is a powerful artifact forged by the Dark Lord Sauron in the fires of Mount Doom. It was created to control the other Rings of Power. The Ring grants its bearer invisibility and extends their life, but it also corrupts them and binds them to Sauron's will. It can only be destroyed in the same fires where it was made."
+  },
+  {
+    "instruction": "Tell me about the Shire",
+    "response": "The Shire is a peaceful region in Middle-earth inhabited by Hobbits. It's a rural, agricultural land with rolling hills, farms, and small villages. The Shire is known for its tranquility and isolation from the troubles of the wider world. It's divided into four Farthings and is home to Hobbiton, where Bilbo and Frodo Baggins lived in Bag End."
+  },
+  {
+    "instruction": "Who are the Elves in Middle-earth?",
+    "response": "Elves are one of the oldest and most powerful races in Middle-earth. They are immortal, wise, and possess great beauty and skill in arts and crafts. Important Elves include Galadriel, Elrond, and Legolas. They played crucial roles in the wars against Morgoth and Sauron. Many Elves sailed to the Undying Lands in the West, leaving Middle-earth forever."
+  },
+  {
+    "instruction": "What is Mordor?",
+    "response": "Mordor is the realm of Sauron, the Dark Lord, located in southeastern Middle-earth. It's a desolate, volcanic wasteland surrounded by mountain ranges. At its heart lies Mount Doom (Orodruin), where the One Ring was forged and where it must be destroyed. Barad-dûr, Sauron's dark tower, dominates the landscape. Mordor is guarded by the Black Gate and patrolled by Orcs and other evil creatures."
+  },
+  {
+    "instruction": "Who is Aragorn?",
+    "response": "Aragorn is the heir of Isildur and the rightful King of Gondor. He is a Ranger of the North who goes by the name 'Strider' before revealing his true identity. As a Dúnedain, he has an extended lifespan and exceptional skills in combat, healing, and leadership. He leads the Fellowship after Gandalf's fall and ultimately becomes King Elessar, uniting the kingdoms of Gondor and Arnor."
+  },
+  {
+    "instruction": "What are Hobbits?",
+    "response": "Hobbits are a diminutive people, typically standing between 2 and 4 feet tall. They have furry feet and prefer a quiet, comfortable life focused on food, drink, and tobacco. Hobbits are remarkably resilient and resistant to corruption. Famous Hobbits include Bilbo Baggins, Frodo Baggins, Samwise Gamgee, Meriadoc Brandybuck, and Peregrin Took. They played crucial roles in defeating Sauron despite their small stature."
+  },
+  {
+    "instruction": "Tell me about the Fellowship of the Ring",
+    "response": "The Fellowship of the Ring was formed in Rivendell to escort Frodo Baggins to Mount Doom to destroy the One Ring. It consisted of nine members: Frodo, Sam, Merry, Pippin (Hobbits), Aragorn, Boromir (Men), Legolas (Elf), Gimli (Dwarf), and Gandalf (Wizard). The number nine was chosen to oppose the nine Ringwraiths. The Fellowship was broken after Boromir's death and the capture of Merry and Pippin."
+  },
+  {
+    "instruction": "What is Rivendell?",
+    "response": "Rivendell, also known as Imladris, is an Elven sanctuary in Middle-earth founded and ruled by Elrond. It's hidden in a valley in the Misty Mountains and protected by Elven magic. Rivendell is a place of healing, learning, and counsel. The Council of Elrond was held there, where the fate of the One Ring was decided. It served as a safe haven for the Fellowship before they began their quest."
+  },
+  {
+    "instruction": "Who is Sauron?",
+    "response": "Sauron is the primary antagonist of The Lord of the Rings. Originally a Maia serving Morgoth, he became the Dark Lord after Morgoth's defeat. He created the One Ring to control Middle-earth. After losing the Ring to Isildur, he slowly rebuilt his power in Mordor. Though he lacks physical form for most of LOTR, his will and influence are embodied in the Eye of Sauron, constantly searching for the Ring."
+  },
+  {
+    "instruction": "What is Minas Tirith?",
+    "response": "Minas Tirith is the capital city of Gondor, built on seven levels into the side of Mount Mindolluin. Each level is surrounded by a wall, with the Citadel and the White Tower at the summit. It was originally called Minas Anor (Tower of the Sun). The city faces Mordor and was besieged during the War of the Ring. After Aragorn became king, it was restored to its former glory."
+  },
+  {
+    "instruction": "Who are the Nazgûl?",
+    "response": "The Nazgûl, also known as Ringwraiths or the Nine, are Sauron's most terrifying servants. They were once great kings of Men who were enslaved by the Nine Rings of Power. They are neither living nor dead, invisible except for their black robes and armor. The Witch-king of Angmar is their leader. They hunt for the One Ring and are only truly vulnerable to special weapons and fire."
+  },
+  {
+    "instruction": "What is the importance of Mount Doom?",
+    "response": "Mount Doom, or Orodruin in Sindarin, is a volcano in Mordor where Sauron forged the One Ring in its fires. It's the only place where the Ring can be destroyed, as the fires there are hot enough to unmake it. The mountain constantly emits smoke and lava, making it a treacherous destination. Frodo's journey to cast the Ring into its fires forms the central quest of The Lord of the Rings."
+  },
+  {
+    "instruction": "Tell me about Gollum",
+    "response": "Gollum, originally named Sméagol, was a Hobbit-like creature corrupted by the One Ring. He possessed the Ring for nearly 500 years, which extended his life but twisted his body and mind. He refers to the Ring as 'my precious' and has a split personality, arguing with himself. Despite his treachery, Gollum inadvertently saves Middle-earth by biting off Frodo's finger with the Ring and falling into Mount Doom, destroying it."
+  },
+  {
+    "instruction": "What is Lothlórien?",
+    "response": "Lothlórien is an ancient Elven forest realm ruled by Lord Celeborn and Lady Galadriel. The trees are mallorn, with silver bark and golden leaves. The Elves live in treehouses called flets, including the capital Caras Galadhon. Time moves differently in Lothlórien due to Galadriel's power and the influence of her Ring, Nenya. The Fellowship rested there after Gandalf's fall, and it was a place of healing and wisdom."
+  },
+  {
+    "instruction": "What is The Hobbit?",
+    "response": "A fantasy novel published in 1937 by J.R.R. Tolkien, introducing Bilbo Baggins and the world that would later expand into The Lord of the Rings."
+  },
+  {
+    "instruction": "What is The Lord of the Rings?",
+    "response": "An epic fantasy trilogy published between 1954–1955, consisting of The Fellowship of the Ring, The Two Towers, and The Return of the King."
+  },
+  {
+    "instruction": "What is The Silmarillion?",
+    "response": "A posthumously published work (1977), edited by Christopher Tolkien. It contains the mythological history of Arda, including the creation, the First Age, and the Akallabêth."
+  },
+  {
+    "instruction": "What is Unfinished Tales?",
+    "response": "A 1980 collection of narratives ranging from the First to the Third Age, edited by Christopher Tolkien. It expands on characters and events from The Silmarillion and LOTR."
+  },
+  {
+    "instruction": "What is The History of Middle-earth?",
+    "response": "A 12-volume scholarly series (1983–1996) edited by Christopher Tolkien, containing drafts, notes, and variant texts of the legendarium."
+  },
+  {
+    "instruction": "What is The Letters of J.R.R. Tolkien?",
+    "response": "A collection of selected letters published in 1981, edited by Humphrey Carpenter. It provides insight into Tolkien’s personal thoughts and creative process."
+  },
+  {
+    "instruction": "What is Sir Gawain and the Green Knight (translation)?",
+    "response": "A translation and edition published in 1925 by J.R.R. Tolkien and E.V. Gordon, of the Middle English Arthurian romance."
+  },
+  {
+    "instruction": "What is Beowulf: A Translation and Commentary?",
+    "response": "Published posthumously in 2014, this is Tolkien’s translation of the Old English epic Beowulf, with notes and commentary by Christopher Tolkien."
+  },
+  {
+    "instruction": "What is the One Ring?",
+    "response": "A ring forged by Sauron in Mount Doom to control the other Rings of Power. It bound his will to Middle-earth and could only be destroyed in the fire where it was made."
+  },
+  {
+    "instruction": "What are the Silmarils?",
+    "response": "Three perfect jewels created by Fëanor, capturing the light of the Two Trees of Valinor. Their theft caused much of the strife in the First Age."
+  },
+  {
+    "instruction": "What are the Palantíri?",
+    "response": "Seven seeing-stones created by the Elves, later brought to Middle-earth by the Númenóreans. They allowed communication across distances."
+  },
+  {
+    "instruction": "What is Quenya?",
+    "response": "The High-Elven language, developed in Valinor and later preserved as a scholarly and ceremonial tongue."
+  },
+  {
+    "instruction": "What is Sindarin?",
+    "response": "The common Elven language spoken in Middle-earth during the Second and Third Ages."
+  },
+  {
+    "instruction": "What was the War of Wrath?",
+    "response": "The final conflict of the First Age, where the Valar and Elves defeated Morgoth, leading to his expulsion beyond the world."
+  },
+  {
+    "instruction": "What was the Downfall of Númenor?",
+    "response": "The destruction of the island kingdom after Ar-Pharazôn defied the Ban of the Valar and sailed against Aman. It sank beneath the sea."
+  },
+  {
+    "instruction": "What was the War of the Last Alliance?",
+    "response": "The war of Elves and Men against Sauron at the end of the Second Age, resulting in his first defeat and the taking of the One Ring by Isildur."
+  },
+  {
+    "instruction": "What was the War of the Ring?",
+    "response": "The climactic war at the end of the Third Age, fought against Sauron’s forces, ending with the destruction of the One Ring."
+  },
+  {
+    "instruction": "What is Valinor?",
+    "response": "The land of the Valar in the West, beyond the mortal world. It was the home of the Elves who accepted the summons of the Valar."
+  },
+  {
+    "instruction": "What is Númenor?",
+    "response": "An island kingdom of Men gifted by the Valar after the defeat of Morgoth. It rose to great power but was destroyed in the Akallabêth."
+  },
+  {
+    "instruction": "What is Gondor?",
+    "response": "A kingdom of Men founded by the Númenóreans. It became one of the chief defenders against Sauron."
+  },
+  {
+    "instruction": "What is Rohan?",
+    "response": "A kingdom of horse-lords in the north of Gondor, renowned for its cavalry and alliance with Gondor."
+  },
+  {
+    "instruction": "What is Mordor?",
+    "response": "The dark land in the southeast of Middle-earth, ruled by Sauron. Its center was the volcano Mount Doom, where the One Ring was forged."
+  },
+  {
+    "instruction": "What is the Shire?",
+    "response": "A peaceful land in Eriador, home to the Hobbits. It was largely untouched by great wars until the War of the Ring."
+  },
+  {
+    "instruction": "Who is Fëanor?",
+    "response": "The greatest craftsman of the Elves, son of Finwë and Míriel. Creator of the Silmarils, whose theft by Morgoth led to the wars of Beleriand."
+  },
+  {
+    "instruction": "Who is Galadriel?",
+    "response": "An Elf of the Noldor, granddaughter of Finwë, and Lady of Lothlórien. She was one of the bearers of the Three Rings, keeper of Nenya."
+  },
+  {
+    "instruction": "Who is Elrond?",
+    "response": "Lord of Rivendell, Half-elven descendant of Eärendil. He was a wise leader and one of the bearers of the Three Rings."
+  },
+  {
+    "instruction": "Who is Aragorn?",
+    "response": "Heir of Isildur, raised in Rivendell under Elrond’s care. Later crowned King Elessar of Gondor after the War of the Ring."
+  },
+  {
+    "instruction": "Who is Frodo Baggins?",
+    "response": "A Hobbit of the Shire who inherited the One Ring from Bilbo. He carried it to Mount Doom to destroy it."
+  },
+  {
+    "instruction": "Who is Samwise Gamgee?",
+    "response": "A loyal Hobbit companion of Frodo. His courage and loyalty were key to the Ring’s destruction."
+  },
+  {
+    "instruction": "Who is Gandalf?",
+    "response": "A Maia in the guise of a wizard, one of the Istari sent to Middle-earth. He guided the Fellowship against Sauron."
+  },
+  {
+    "instruction": "Who is Sauron?",
+    "response": "The Dark Lord of the Second and Third Ages. A Maia who forged the One Ring to dominate Middle-earth."
+  },
+  {
+    "instruction": "Who is Morgoth?",
+    "response": "Originally Melkor, the mightiest of the Valar. He rebelled against Eru and became the first Dark Lord."
+  }
+]

@@ -1,81 +1,63 @@
 """
-UI Web Semplice per Modello Fine-tuned
-Usa Gradio - interfaccia web con 3 righe di codice!
-
-Installa: pip install gradio
-Esegui: python ui_simple.py
+UI Web Semplice con Base Model + Adapter
+Versione alternativa che evita problemi di dipendenze Gemma 3
 """
 
 import os
 import torch
 import gradio as gr
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from peft import PeftModel
 from dotenv import load_dotenv
 
 # ==============================================================================
 # Configurazione
 # ==============================================================================
-MODEL_PATH = "./fine_tuned_models/f1_expert_merged"  # Modello merged
-USE_BASE_MODEL = False  # Se True, usa base model senza fine-tuning
+BASE_MODEL_NAME = "google/gemma-3-4b-it"
+ADAPTER_PATH = "./finetuning_projects/f1_expert_fixed/adapter"
 
-if USE_BASE_MODEL:
-    MODEL_PATH = "google/gemma-3-4b-it"
-    
 load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN")
 
 print("="*70)
-print("  🎨 UI WEB SEMPLICE - Modello F1 Expert")
+print("  🎨 UI WEB - F1 Expert (Base + Adapter)")
 print("="*70)
 print()
-print(f"📦 Caricamento modello: {MODEL_PATH}")
+print(f"📦 Caricamento base model + adapter...")
 print("   (Questo richiede 2-3 minuti...)")
 print()
 
 # ==============================================================================
-# Carica Modello e Tokenizer
+# Carica Base Model + Adapter
 # ==============================================================================
-try:
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_PATH, token=HF_TOKEN, trust_remote_code=True)
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-        tokenizer.pad_token_id = tokenizer.eos_token_id
+tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL_NAME, token=HF_TOKEN)
+if tokenizer.pad_token is None:
+    tokenizer.pad_token = tokenizer.eos_token
+    tokenizer.pad_token_id = tokenizer.eos_token_id
 
-    model = AutoModelForCausalLM.from_pretrained(
-        MODEL_PATH,
-        torch_dtype=torch.float32,
-        low_cpu_mem_usage=True,
-        token=HF_TOKEN,
-        trust_remote_code=True
-    )
-    model.config.pad_token_id = tokenizer.pad_token_id
-    model.eval()
-except Exception as e:
-    print(f"❌ Errore caricamento modello: {e}")
-    print()
-    print("💡 Prova a usare il base model + adapter invece:")
-    print("   Modifica ui_simple.py riga 18: USE_BASE_MODEL = True")
-    import sys
-    sys.exit(1)
+# Carica base model
+base_model = AutoModelForCausalLM.from_pretrained(
+    BASE_MODEL_NAME,
+    torch_dtype=torch.float32,
+    low_cpu_mem_usage=True,
+    token=HF_TOKEN
+)
+base_model.config.pad_token_id = tokenizer.pad_token_id
 
-print("✓ Modello caricato!")
+# Carica adapter LoRA
+model = PeftModel.from_pretrained(base_model, ADAPTER_PATH)
+model.eval()
+
+print("✓ Modello caricato (base + adapter LoRA)!")
 print()
 
 # ==============================================================================
 # Funzione di Chat
 # ==============================================================================
 def chat(message, history, temperature=0.7, max_tokens=200):
-    """
-    Gestisce la conversazione con il modello
+    """Gestisce la conversazione con il modello"""
     
-    Args:
-        message: Il messaggio dell'utente
-        history: Cronologia chat (lista di tuple [user, assistant])
-        temperature: Temperatura per generation (0-1)
-        max_tokens: Numero massimo di token da generare
-    """
-    
-    # Tokenizza il messaggio
+    # Tokenizza
     inputs = tokenizer(
         message,
         return_tensors="pt",
@@ -92,15 +74,15 @@ def chat(message, history, temperature=0.7, max_tokens=200):
             max_new_tokens=int(max_tokens),
             temperature=float(temperature),
             top_p=0.9,
-            do_sample=True,
+            do_sample=True if temperature > 0 else False,
             pad_token_id=tokenizer.pad_token_id,
             eos_token_id=tokenizer.eos_token_id,
         )
     
-    # Decodifica la risposta
+    # Decodifica
     response = tokenizer.decode(outputs[0], skip_special_tokens=True)
     
-    # Rimuovi il prompt dall'output
+    # Rimuovi prompt
     if response.startswith(message):
         response = response[len(message):].strip()
     
@@ -110,30 +92,25 @@ def chat(message, history, temperature=0.7, max_tokens=200):
 # Interfaccia Gradio
 # ==============================================================================
 
-# Esempi di domande
 examples = [
     ["Tell me about Lewis Hamilton's performance in F1."],
     ["What do you know about McLaren's lap times?"],
     ["Who typically finishes in position 1 at Monaco Grand Prix?"],
-    ["Compare Ferrari and Mercedes performance in 2023."],
+    ["Compare Ferrari and Mercedes performance."],
     ["What is the fastest lap time at Monza?"],
 ]
 
-# Tema e CSS custom
 custom_css = """
-.container {
-    max-width: 900px;
-    margin: auto;
-}
+.container { max-width: 900px; margin: auto; }
+footer { display: none !important; }
 """
 
-# Crea interfaccia
-with gr.Blocks(css=custom_css, title="F1 Expert Chat") as demo:
+with gr.Blocks(css=custom_css, title="F1 Expert Chat", theme=gr.themes.Soft()) as demo:
     
     gr.Markdown(
         """
-        # 🏎️ F1 Expert Assistant
-        ### Modello Fine-tuned su Dati Formula 1
+        # 🏎️ F1 Expert Assistant (Fine-tuned)
+        ### Powered by Gemma 3 + LoRA Fine-tuning
         
         Chiedi informazioni su driver, team, circuiti e statistiche F1!
         """
@@ -145,28 +122,31 @@ with gr.Blocks(css=custom_css, title="F1 Expert Chat") as demo:
                 label="Chat",
                 height=500,
                 show_label=True,
-            )
-            
-            msg = gr.Textbox(
-                label="Il tuo messaggio",
-                placeholder="Es: Tell me about Max Verstappen...",
-                show_label=False,
+                avatar_images=("👤", "🤖"),
             )
             
             with gr.Row():
-                submit = gr.Button("Invia", variant="primary")
-                clear = gr.Button("Cancella Chat")
-        
+                msg = gr.Textbox(
+                    label="Messaggio",
+                    placeholder="Scrivi la tua domanda F1...",
+                    show_label=False,
+                    scale=5
+                )
+                submit = gr.Button("🚀 Invia", variant="primary", scale=1)
+            
+            with gr.Row():
+                clear = gr.Button("🗑️ Cancella", size="sm")
+                
         with gr.Column(scale=1):
-            gr.Markdown("### ⚙️ Parametri")
+            gr.Markdown("### ⚙️ Parametri Generation")
             
             temperature = gr.Slider(
-                minimum=0.1,
+                minimum=0.0,
                 maximum=1.0,
                 value=0.7,
                 step=0.1,
-                label="Temperature",
-                info="Creatività (0.1=preciso, 1.0=creativo)"
+                label="🌡️ Temperature",
+                info="0=preciso, 1=creativo"
             )
             
             max_tokens = gr.Slider(
@@ -174,28 +154,32 @@ with gr.Blocks(css=custom_css, title="F1 Expert Chat") as demo:
                 maximum=500,
                 value=200,
                 step=50,
-                label="Max Tokens",
+                label="📏 Max Tokens",
                 info="Lunghezza risposta"
             )
             
-            gr.Markdown("### 📝 Esempi")
-            gr.Examples(
-                examples=examples,
-                inputs=msg,
-            )
+            gr.Markdown("---")
+            gr.Markdown("### 💡 Esempi Rapidi")
             
+            example_buttons = []
+            for example in examples:
+                btn = gr.Button(f"📌 {example[0][:30]}...", size="sm")
+                example_buttons.append((btn, example[0]))
+            
+            gr.Markdown("---")
             gr.Markdown(
-                f"""
-                ### ℹ️ Info
-                - **Modello**: {MODEL_PATH.split('/')[-1]}
+                """
+                ### ℹ️ Info Modello
+                - **Base**: gemma-3-4b-it
+                - **Fine-tuning**: LoRA (F1 dataset)
                 - **Device**: CPU
-                - **Status**: ✅ Pronto
+                - **Status**: ✅ Online
                 """
             )
     
     # Eventi
     def respond(message, chat_history, temp, tokens):
-        if not message.strip():
+        if not message or not message.strip():
             return chat_history, ""
         
         # Genera risposta
@@ -206,7 +190,7 @@ with gr.Blocks(css=custom_css, title="F1 Expert Chat") as demo:
         
         return chat_history, ""
     
-    # Submit con Enter o bottone
+    # Submit
     msg.submit(
         respond,
         inputs=[msg, chatbot, temperature, max_tokens],
@@ -219,25 +203,35 @@ with gr.Blocks(css=custom_css, title="F1 Expert Chat") as demo:
         outputs=[chatbot, msg]
     )
     
-    clear.click(lambda: None, None, chatbot, queue=False)
+    # Bottoni esempio
+    for btn, example_text in example_buttons:
+        btn.click(
+            lambda x=example_text: x,
+            outputs=msg
+        )
+    
+    # Clear
+    clear.click(lambda: [], outputs=chatbot, queue=False)
 
 # ==============================================================================
-# Avvia l'interfaccia
+# Avvio
 # ==============================================================================
 if __name__ == "__main__":
     print("="*70)
     print("  🚀 AVVIO UI WEB")
     print("="*70)
     print()
-    print("📱 L'interfaccia si aprirà automaticamente nel browser")
-    print("🌐 URL locale: http://localhost:7860")
+    print("📱 Apertura browser automatica...")
+    print("🌐 URL: http://localhost:7860")
     print()
-    print("💡 Per fermare: Ctrl+C nel terminal")
+    print("⚠️  Per fermare: Ctrl+C nel terminal")
     print()
     
+    demo.queue()  # Abilita code per requests multiple
     demo.launch(
-        server_name="127.0.0.1",  # Solo locale
+        server_name="127.0.0.1",
         server_port=7860,
-        share=False,  # NON condividere online
-        inbrowser=True,  # Apri browser automaticamente
+        share=False,
+        inbrowser=True,
+        show_error=True
     )
